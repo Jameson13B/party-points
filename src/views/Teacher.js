@@ -41,6 +41,12 @@ const Teacher = props => {
           </CstmLink>
         </IconBtn>
         <IconBtn>
+          <CstmLink to='/store'>
+            <p>Store</p>
+            <Icon icon='store' />
+          </CstmLink>
+        </IconBtn>
+        <IconBtn>
           <CstmLink to='/register'>
             <p>New User</p>
             <Icon icon='person_add' />
@@ -50,12 +56,6 @@ const Teacher = props => {
           <CstmLink to='/admin'>
             <p>Edit User</p>
             <Icon icon='person' />
-          </CstmLink>
-        </IconBtn>
-        <IconBtn>
-          <CstmLink to='/store'>
-            <p>Store</p>
-            <Icon icon='store' />
           </CstmLink>
         </IconBtn>
       </BtnPanel>
@@ -109,7 +109,7 @@ const IconBtn = styled.div`
   margin-top: 15px;
   padding: 15px;
   text-align: center;
-  width: 25%;
+  width: 30%;
   :hover {
     background: #444;
   }
