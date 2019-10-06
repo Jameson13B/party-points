@@ -20,3 +20,8 @@ function App() {
 }
 
 export default App
+
+// Register
+// Reporting
+// Edit User
+// Store

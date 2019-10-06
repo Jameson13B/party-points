@@ -1,9 +1,5 @@
 import firebase from 'firebase'
 
-require('dotenv').config()
-
-console.log(process.env)
-
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -17,11 +13,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const Firebase = firebase.initializeApp(firebaseConfig)
-// Initialize Analytics
-// firebase.analytics()
 
-// Initialize database instance
+// Database instance
 export const database = Firebase.firestore()
 
-// Initialize auth instance
+// Authorization instance
 export const auth = Firebase.auth()

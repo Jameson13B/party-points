@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { database, auth } from '../firebase'
-// import UserSummary from '../Components/Dashboard/DashboardUserSummary'
+import { database } from '../firebase'
+import UserSummary from '../components/UserSummary'
 import Icon from '../components/Icon'
 import styled from 'styled-components'
 
@@ -9,20 +9,47 @@ class Dashboard extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      class: localStorage.getItem('PP:dashboardFilter') || 'All'
+      track: localStorage.getItem('PP:dashboardFilter') || 'All',
+      users: []
     }
   }
 
   componentDidMount() {
-    console.log(database)
-    console.log(auth)
+    database.collection('users').onSnapshot(res => {
+      let users = []
+      res.forEach(doc => {
+        if (doc.data().track !== 'Teacher')
+          users.push({ ...doc.data(), id: doc.id })
+      })
+      this.setState({ users })
+    })
   }
 
   handleFilterChange = e => {
     localStorage.setItem('filterItem', e.target.value)
-    this.setState({ class: e.target.value })
+    this.setState({ track: e.target.value })
   }
   render() {
+    let users = this.state.users
+    // Filter users and create class button
+    let classUser = {
+      id: '',
+      name: '',
+      balance: '',
+      class: ''
+    }
+    if (this.state.track !== 'All') {
+      users = this.state.users.filter(user => user.track === this.state.track)
+      classUser.id = `${this.state.track} Class`
+      classUser.name = `${this.state.track} Class`
+      classUser.class = this.state.track
+    }
+    // Create list for filter
+    let classes = []
+    users.forEach(
+      user => !classes.includes(user.track) && classes.push(user.track)
+    )
+
     return (
       <Container>
         <Header>
@@ -33,27 +60,28 @@ class Dashboard extends Component {
             <Icon icon='home' />
           </CstmLink>
           <h3>Dashboard</h3>
-          <Select onChange={this.handleFilterChange} value={this.state.class}>
+          <Select onChange={this.handleFilterChange} value={this.state.track}>
             <option value='All'>All</option>
-            {/* {classes.map((clas, i) => (
+            {classes.map((clas, i) => (
               <option value={clas} key={i}>
                 {clas.charAt(0).toUpperCase() + clas.slice(1)}
               </option>
-            ))} */}
+            ))}
           </Select>
         </Header>
-        {/* <UserList> */}
-        {/* If class is filtered show class button */}
-        {/* {this.state.class !== 'All' && <UserSummary user={classUser} />} */}
-        {/* List all users for current filter */}
-        {/* {users
+        <UserList>
+          {/* If class is filtered show class button */}
+          {this.state.track !== 'All' && <UserSummary user={classUser} />}
+          {/* List all users for current filter */}
+          {console.log(users)}
+          {users
             .sort((a, b) => {
               return a.name > b.name ? 1 : -1
             })
             .map(user => (
               <UserSummary key={user.id} user={user} />
             ))}
-        </UserList> */}
+        </UserList>
       </Container>
     )
   }
@@ -62,11 +90,13 @@ class Dashboard extends Component {
 export default Dashboard
 
 const Container = styled.div`
+  align-items: center;
   background-color: #282c34;
   color: white;
+  display: flex;
+  flex-direction: column;
   font-size: calc(10px + 2vmin);
-  // align-items: center;
-  // min-height: 100vh;
+  min-height: 100vh;
 `
 const Header = styled.div`
   align-items: center;
@@ -91,18 +121,18 @@ const Select = styled.select`
     text-transform: uppercase;
   }
 `
-// const UserList = styled.div`
-//   align-content: flex-start;
-//   border: 1px solid white;
-//   border-radius: 15px;
-//   display: flex;
-//   flex-wrap: wrap;
-//   height: 84vh;
-//   justify-content: space-evenly;
-//   overflow: auto;
-//   padding: 2vh;
-//   width: 75%;
-// `
+const UserList = styled.div`
+  align-content: flex-start;
+  border: 1px solid white;
+  border-radius: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  height: 84vh;
+  justify-content: space-evenly;
+  overflow: auto;
+  padding: 2vh;
+  width: 75%;
+`
 const CstmLink = styled(Link)`
   color: white;
   margin: 0 10px;

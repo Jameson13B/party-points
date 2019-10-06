@@ -1,13 +1,29 @@
-import React from 'react'
-import { Link, Redirect } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { database, auth } from '../firebase'
 import styled from 'styled-components'
 import Icon from '../components/Icon'
 
 const Teacher = props => {
-  if (props.auth.isLoaded && props.auth.isEmpty) {
-    return <Redirect to='/login' />
-  }
-  // Check if not a teacher and redirect to student
+  useEffect(() => {
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        database
+          .collection('users')
+          .doc(user.uid)
+          .get()
+          .then(doc => {
+            if (doc.data().track !== 'Teacher') {
+              props.history.push('/student-portal')
+            }
+          })
+      } else {
+        props.history.push('/login')
+      }
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <Container>
       <Title>Party Points Teacher Page</Title>
@@ -43,7 +59,14 @@ const Teacher = props => {
           </CstmLink>
         </IconBtn>
       </BtnPanel>
-      <Logout onClick={() => props.firebase.logout()}>Logout</Logout>
+      <Logout
+        onClick={() => {
+          console.log(auth)
+          auth.signOut()
+        }}
+      >
+        Logout
+      </Logout>
       <br />
     </Container>
   )

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-// import { Redirect } from 'react-router'
+import { auth } from '../firebase'
+import { Redirect } from 'react-router'
 import styled from 'styled-components'
 
 class Login extends React.Component {
@@ -9,7 +10,8 @@ class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
-      error: null
+      error: null,
+      user: null
     }
   }
   static propTypes = {
@@ -19,49 +21,52 @@ class Login extends React.Component {
       logout: PropTypes.func.isRequired
     })
   }
+  componentDidMount() {
+    auth.onAuthStateChanged(user => {
+      user && this.setState({ user })
+    })
+  }
   handleLogin = e => {
     e.preventDefault()
     if (!this.state.email || !this.state.password)
       this.this.setState({ error: 'Email and Password Required' })
 
-    this.props.firebase
-      .login({ email: this.state.email, password: this.state.password })
+    auth
+      .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(() => this.props.history.push('/teacher-portal'))
       .catch(error => this.setState({ error }))
   }
   render() {
-    // if (!isEmpty(this.props.auth)) {
-    //   return <Redirect to='/teacher-portal' />
-    // } else if (!isLoaded(this.props.auth)) {
-    //   return null
-    // } else if (isEmpty(this.props.auth)) {
-    return (
-      <Container>
-        <Title>Party Points</Title>
-        <Message>Login Here</Message>
-        <Form>
-          <Label>Email:</Label>
-          <Input
-            autoComplete='off'
-            type='email'
-            id='email'
-            value={this.state.email}
-            onChange={e => this.setState({ email: e.target.value })}
-          />
-          <Label>Password:</Label>
-          <Input
-            autoComplete='off'
-            type='password'
-            id='password'
-            value={this.state.password}
-            onChange={e => this.setState({ password: e.target.value })}
-          />
-          <Button onClick={this.handleLogin}>Login</Button>
-          {this.state.error ? <Feedback>this.state.error</Feedback> : null}
-        </Form>
-      </Container>
-    )
-    // }
+    if (this.state.user) {
+      return <Redirect to='/teacher-portal' />
+    } else {
+      return (
+        <Container>
+          <Title>Party Points</Title>
+          <Message>Login Here</Message>
+          <Form>
+            <Label>Email:</Label>
+            <Input
+              autoComplete='off'
+              type='email'
+              id='email'
+              value={this.state.email}
+              onChange={e => this.setState({ email: e.target.value })}
+            />
+            <Label>Password:</Label>
+            <Input
+              autoComplete='off'
+              type='password'
+              id='password'
+              value={this.state.password}
+              onChange={e => this.setState({ password: e.target.value })}
+            />
+            <Button onClick={this.handleLogin}>Login</Button>
+            {this.state.error ? <Feedback>this.state.error</Feedback> : null}
+          </Form>
+        </Container>
+      )
+    }
   }
 }
 
