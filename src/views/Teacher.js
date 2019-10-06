@@ -47,15 +47,15 @@ const Teacher = props => {
           </CstmLink>
         </IconBtn>
         <IconBtn>
-          <CstmLink to='/register'>
-            <p>New User</p>
-            <Icon icon='person_add' />
-          </CstmLink>
-        </IconBtn>
-        <IconBtn>
           <CstmLink to='/admin'>
             <p>Edit User</p>
             <Icon icon='person' />
+          </CstmLink>
+        </IconBtn>
+        <IconBtn>
+          <CstmLink to='/register'>
+            <p>New User</p>
+            <Icon icon='person_add' />
           </CstmLink>
         </IconBtn>
       </BtnPanel>
