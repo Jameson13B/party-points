@@ -46,7 +46,7 @@ class Dashboard extends Component {
     }
     // Create list for filter
     let classes = []
-    users.forEach(
+    this.state.users.forEach(
       user => !classes.includes(user.track) && classes.push(user.track)
     )
 
