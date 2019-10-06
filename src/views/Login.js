@@ -62,7 +62,7 @@ class Login extends React.Component {
               onChange={e => this.setState({ password: e.target.value })}
             />
             <Button onClick={this.handleLogin}>Login</Button>
-            {this.state.error ? <Feedback>this.state.error</Feedback> : null}
+            {this.state.error ? <Feedback>{this.state.error}</Feedback> : null}
           </Form>
         </Container>
       )
