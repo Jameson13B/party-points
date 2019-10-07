@@ -1,17 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import { getInitials } from '../utils'
 
 const UserSummary = props => {
-  const getInitials = name => {
-    const first = name.substring(0, 1)
-    let last = name
-      .split(' ')
-      .slice(1, 2)
-      .join('')
-      .substring(0, 1)
-    return first + last
-  }
   return (
     <CustomLink to={`profile/${props.user.id}`}>
       <User data-id={props.user.id}>
