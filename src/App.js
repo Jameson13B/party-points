@@ -11,6 +11,7 @@ function App() {
       <Switch>
         <Route exact path='/' component={Login} />
         <Route path='/teacher-portal' component={Teacher} />
+        <Route path='/student-portal' component={Teacher} />
         <Route path='/dashboard' component={Dashboard} />
         <Route path='/login' component={Login} />
         <Route path='/register' component={Register} />
@@ -21,7 +22,6 @@ function App() {
 
 export default App
 
-// Register
 // Reporting
 // Edit User
 // Store

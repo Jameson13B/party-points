@@ -1,6 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import { database, auth } from '../firebase'
 import styled from 'styled-components'
 
 class Register extends React.Component {
@@ -14,12 +13,7 @@ class Register extends React.Component {
       error: null
     }
   }
-  static propTypes = {
-    auth: PropTypes.object,
-    firebase: PropTypes.shape({
-      createUser: PropTypes.func.isRequired
-    })
-  }
+
   handleRegister = e => {
     e.preventDefault()
     const { email, password, track, name } = this.state
@@ -30,16 +24,26 @@ class Register extends React.Component {
     const profile = {
       email,
       name,
-      track
+      track,
+      balance: 0
     }
 
-    this.props.firebase
-      .createUser(
-        { email: this.state.email, password: this.state.password },
-        profile
-      )
-      .then(() => this.setState({ error: 'Successfully Added' }))
-      .catch(error => this.setState({ error }))
+    auth
+      .createUserWithEmailAndPassword(this.state.email, this.state.password)
+      .then(res => {
+        database
+          .collection('users')
+          .doc(res.user.uid)
+          .set(profile)
+        this.setState({
+          error: `Successfully Added ${profile.name}`,
+          email: '',
+          password: '',
+          track: '',
+          name: ''
+        })
+      })
+      .catch(error => this.setState({ error: error.message }))
   }
   render() {
     return (
@@ -80,8 +84,12 @@ class Register extends React.Component {
             onChange={e => this.setState({ password: e.target.value })}
           />
           <Button onClick={this.handleRegister}>Register</Button>
-          <DashboardLink to='/teacher-portal'>Go To Dashboard</DashboardLink>
-          {this.state.error ? <Feedback>this.state.error</Feedback> : null}
+          {this.state.error ? <Feedback>{this.state.error}</Feedback> : null}
+          <DashboardLink
+            onClick={() => this.props.history.push('/teacher-portal')}
+          >
+            Go To Dashboard
+          </DashboardLink>
         </Form>
       </Container>
     )
@@ -127,16 +135,22 @@ const Button = styled.button`
   padding: 10px 0;
   width: 100%;
 `
-const DashboardLink = styled(Link)`
+const DashboardLink = styled.h1`
   color: black;
   font-size: 1rem;
+  font-weight: normal;
   margin: 20px auto;
   text-decoration: none;
   :hover {
+    cursor: pointer;
     text-decoration: underline;
   }
 `
 const Feedback = styled.p`
   color: red;
+  font-size: 0.9rem;
   font-style: italic;
+  margin-bottom: 0px;
+  text-align: center;
+  width: 100%;
 `
