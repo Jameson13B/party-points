@@ -61,7 +61,6 @@ const Teacher = props => {
       </BtnPanel>
       <Logout
         onClick={() => {
-          console.log(auth)
           auth.signOut()
         }}
       >
