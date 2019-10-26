@@ -34,7 +34,7 @@ class Login extends React.Component {
     auth
       .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(() => this.props.history.push('/teacher-portal'))
-      .catch(error => this.setState({ error }))
+      .catch(error => this.setState({ error: error.message }))
   }
   render() {
     if (this.state.user) {

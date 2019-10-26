@@ -20,6 +20,9 @@ export const database = Firebase.firestore()
 // Authorization instance
 export const auth = Firebase.auth()
 
+// Functions instance
+export const functions = Firebase.functions()
+
 // Cloud Functions
 export const registerUser = Firebase.functions().httpsCallable('registerUser')
 export const updateUser = Firebase.functions().httpsCallable('updateUser')
