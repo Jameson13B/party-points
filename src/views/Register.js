@@ -40,7 +40,7 @@ class Register extends React.Component {
           })
           .then(() => {
             this.setState({
-              error: `Successfully created ${profile.name}`,
+              error: `Successfully created ${res.data.data.displayName}`,
               email: '',
               password: '',
               track: '',
