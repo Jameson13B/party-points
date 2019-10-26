@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { auth, database } from '../firebase'
+import { database, functions } from '../firebase'
 import { getInitials } from '../utils'
 
 class UpdateUser extends Component {
@@ -11,7 +11,7 @@ class UpdateUser extends Component {
       id: '',
       name: '',
       email: '',
-      parentEmail: '',
+      parentsEmail: '',
       track: '',
       feedback: null
     }
@@ -32,33 +32,48 @@ class UpdateUser extends Component {
       id: user.id,
       name: user.name,
       email: user.email,
-      parentEmail: user.parentEmail || '',
+      parentsEmail: user.parentsEmail || '',
       track: user.track || '',
       feedback: null
     })
   updateUser = e => {
     e.preventDefault()
-    database
-      .collection('users')
-      .doc(this.state.id)
-      .update({
-        name: this.state.name,
-        email: this.state.email,
-        parentEmail: this.state.parentEmail,
-        track: this.state.track
+    const updateUser = functions.httpsCallable('updateUser')
+    updateUser({
+      id: this.state.id,
+      name: this.state.name,
+      email: this.state.email,
+      parentsEmail: this.state.parentsEmail,
+      track: this.state.track
+    })
+      .then(res => {
+        database
+          .collection('users')
+          .doc(res.data.data.uid)
+          .update({
+            email: this.state.email,
+            name: this.state.name,
+            parentsEmail: this.state.parentsEmail,
+            track: this.state.track,
+            balance: 0
+          })
+          .then(() => {
+            this.setState({
+              feedback: `Successfully updated ${res.data.data.displayName}`,
+              email: '',
+              password: '',
+              track: '',
+              name: ''
+            })
+          })
+          .catch(() => {
+            this.setState({ feedback: 'Failed to update user in database' })
+          })
       })
-      .then(() => {
-        auth.currentUser.updateEmail(this.state.email)
-        this.setState({
-          id: '',
-          name: '',
-          email: '',
-          parentEmail: '',
-          track: '',
-          feedback: `Succesfully updated ${this.state.name}`
-        })
+      .catch(err => {
+        console.log(err)
+        this.setState({ feedback: 'Failed to update user' })
       })
-      .catch(error => this.setState({ feedback: error }))
   }
   render() {
     return (
@@ -94,9 +109,9 @@ class UpdateUser extends Component {
             onChange={this.handleInputChange}
           />
           <Input
-            name='parentEmail'
+            name='parentsEmail'
             type='text'
-            value={this.state.parentEmail}
+            value={this.state.parentsEmail}
             placeholder='Parents Email'
             onChange={this.handleInputChange}
           />
