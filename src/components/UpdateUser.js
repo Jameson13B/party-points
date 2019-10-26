@@ -201,6 +201,7 @@ const Input = styled.input`
   }
 `
 const UpdateButton = styled.button`
+  background: transparent;
   border: 1px solid white;
   border-radius: 15px;
   color: white;
