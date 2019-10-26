@@ -132,25 +132,32 @@ class UpdateUser extends Component {
 export default UpdateUser
 
 const Container = styled.div`
-  padding: 20px;
+  padding: 10px;
   display: flex;
   height: 89%;
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+  }
 `
 const List = styled.ul`
   flex: 1.25;
   list-style: none;
   padding-left: 0;
   overflow: auto;
+  @media (max-width: 768px) {
+    flex: auto;
+    height: 44%;
+  }
 `
 const User = styled.li`
   display: flex;
   border: 1px solid white;
   border-radius: 15px;
-  padding: 2%;
-  margin: 5% 0;
+  padding: 2% 0;
+  margin: 0 0 5% 0;
   cursor: pointer;
   line-height: 200%;
-  width: 90%;
+  width: 96%;
   :hover {
     background: #444;
   }
@@ -158,6 +165,9 @@ const User = styled.li`
 const Initials = styled.h1`
   font-size: 2.5rem;
   margin: auto 25px;
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
 `
 const Name = styled.h1`
   flex: 3;
@@ -172,6 +182,10 @@ const Form = styled.form`
   flex-direction: column;
   justify-content: center;
   height: 100%;
+  @media (max-width: 768px) {
+    flex: auto;
+    height: 55%;
+  }
 `
 const Input = styled.input`
   background: transparent;
@@ -187,7 +201,6 @@ const Input = styled.input`
   }
 `
 const UpdateButton = styled.button`
-  background: transparent;
   border: 1px solid white;
   border-radius: 15px;
   color: white;
@@ -197,6 +210,9 @@ const UpdateButton = styled.button`
   margin: 15px 0;
   :hover {
     background: #444;
+  }
+  @media (max-width: 768px) {
+    padding: 10px;
   }
 `
 const Feedback = styled.p`

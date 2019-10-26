@@ -78,7 +78,6 @@ class DeleteUser extends Component {
             </User>
           ))}
         </List>
-        ) }}
       </Container>
     )
   }
@@ -87,7 +86,7 @@ class DeleteUser extends Component {
 export default DeleteUser
 
 const Container = styled.div`
-  padding: 20px;
+  padding: 10px;
   height: 89%;
 `
 const List = styled.ul`
@@ -97,8 +96,10 @@ const List = styled.ul`
   list-style: none;
   overflow: auto;
   height: 100%;
+  padding-left: 0;
 `
 const User = styled.li`
+  align-items: center;
   display: flex;
   border: 1px solid white;
   border-radius: 15px;
@@ -107,10 +108,16 @@ const User = styled.li`
   cursor: pointer;
   line-height: 200%;
   width: 65%;
+  @media (max-width: 768px) {
+    width: 95%;
+  }
 `
 const Initials = styled.h1`
   font-size: 3rem;
-  margin: auto 25px;
+  margin: auto 15px;
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
 `
 const Name = styled.h1`
   flex: 3;
@@ -118,6 +125,9 @@ const Name = styled.h1`
   font-size: 1.5rem;
   white-space: nowrap;
   overflow: hidden;
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `
 const CustomIcon = styled(Icon)`
   :hover {
