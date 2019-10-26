@@ -27,8 +27,6 @@ function App() {
 export default App
 
 // Edit User
-//   Update - Doing - Finish cloud functions then apply to component
-//   Delete
 //   Password
 // Reporting
 // Store

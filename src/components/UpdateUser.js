@@ -70,10 +70,7 @@ class UpdateUser extends Component {
             this.setState({ feedback: 'Failed to update user in database' })
           })
       })
-      .catch(err => {
-        console.log(err)
-        this.setState({ feedback: 'Failed to update user' })
-      })
+      .catch(() => this.setState({ feedback: 'Failed to update user' }))
   }
   render() {
     return (

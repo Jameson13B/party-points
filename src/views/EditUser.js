@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import Icon from '../components/Icon'
 import UpdateUser from '../components/UpdateUser'
-// import UserDelete from '../components/DeleteUser'
+import UserDelete from '../components/UserDelete'
 // import UserPassword from '../components/PasswordUser'
 
 class EditUser extends Component {
@@ -48,7 +48,7 @@ class EditUser extends Component {
             </NavBtn>
           </Nav>
           {this.state.view === 'update' ? <UpdateUser /> : null}
-          {/* {this.state.view === 'delete' ? <UserDelete /> : null} */}
+          {this.state.view === 'delete' ? <UserDelete /> : null}
           {/* {this.state.view === 'password' ? <UserPassword /> : null} */}
         </Body>
       </Container>

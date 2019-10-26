@@ -18,7 +18,7 @@ class Register extends React.Component {
     e.preventDefault()
     const { email, password, track, name } = this.state
     if (!email || !password || !track || !name) {
-      this.this.setState({ error: 'Missing Required Fields' })
+      return this.setState({ error: 'Missing Required Fields' })
     }
 
     const registerUser = functions.httpsCallable('registerUser')
