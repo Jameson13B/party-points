@@ -1,5 +1,5 @@
 import React from 'react'
-import { database, auth } from '../firebase'
+import { database, functions } from '../firebase'
 import styled from 'styled-components'
 
 class Register extends React.Component {
@@ -21,29 +21,39 @@ class Register extends React.Component {
       this.this.setState({ error: 'Missing Required Fields' })
     }
 
-    const profile = {
+    const registerUser = functions.httpsCallable('registerUser')
+    registerUser({
       email,
+      password,
       name,
-      track,
-      balance: 0
-    }
-
-    auth
-      .createUserWithEmailAndPassword(this.state.email, this.state.password)
+      track
+    })
       .then(res => {
         database
           .collection('users')
-          .doc(res.user.uid)
-          .set(profile)
-        this.setState({
-          error: `Successfully Added ${profile.name}`,
-          email: '',
-          password: '',
-          track: '',
-          name: ''
-        })
+          .doc(res.data.data.uid)
+          .set({
+            email,
+            name,
+            track,
+            balance: 0
+          })
+          .then(() => {
+            this.setState({
+              error: `Successfully created ${profile.name}`,
+              email: '',
+              password: '',
+              track: '',
+              name: ''
+            })
+          })
+          .catch(() => {
+            this.setState({ error: 'Failed to add user to database' })
+          })
       })
-      .catch(error => this.setState({ error: error.message }))
+      .catch(err => {
+        this.setState({ error: 'Failed to create user' })
+      })
   }
   render() {
     return (
