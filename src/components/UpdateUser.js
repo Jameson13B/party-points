@@ -19,10 +19,7 @@ class UpdateUser extends Component {
   componentDidMount() {
     database.collection('users').onSnapshot(res => {
       let users = []
-      res.forEach(doc => {
-        if (doc.data().track !== 'Teacher')
-          users.push({ ...doc.data(), id: doc.id })
-      })
+      res.forEach(doc => users.push({ ...doc.data(), id: doc.id }))
       this.setState({ users })
     })
   }
@@ -59,7 +56,7 @@ class UpdateUser extends Component {
           })
           .then(() => {
             this.setState({
-              feedback: `Successfully updated ${res.data.data.displayName}`,
+              feedback: `Successfully updated password`,
               email: '',
               password: '',
               track: '',
@@ -77,17 +74,19 @@ class UpdateUser extends Component {
       <Container>
         {/* List of Users */}
         <List>
-          {this.state.users.map(user => (
-            <User
-              key={user.id}
-              id={user.id}
-              name={user.name}
-              onClick={() => this.handleUserSelect(user)}
-            >
-              <Initials>{getInitials(user.name)}</Initials>
-              <Name>{user.name.substring(0, 20)}</Name>
-            </User>
-          ))}
+          {this.state.users
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map(user => (
+              <User
+                key={user.id}
+                id={user.id}
+                name={user.name}
+                onClick={() => this.handleUserSelect(user)}
+              >
+                <Initials>{getInitials(user)}</Initials>
+                <Name>{user.name.substring(0, 20)}</Name>
+              </User>
+            ))}
         </List>
         {/* Form to Update */}
         <Form onSubmit={this.updateUser} autoComplete='none'>
@@ -132,7 +131,7 @@ class UpdateUser extends Component {
 export default UpdateUser
 
 const Container = styled.div`
-  padding: 10px;
+  padding: 10px 0;
   display: flex;
   height: 89%;
   @media (max-width: 768px) {
@@ -143,10 +142,11 @@ const List = styled.ul`
   flex: 1.25;
   list-style: none;
   padding-left: 0;
+  margin: 5px 0 0 0;
   overflow: auto;
   @media (max-width: 768px) {
     flex: auto;
-    height: 44%;
+    height: 50%;
   }
 `
 const User = styled.li`
@@ -184,7 +184,7 @@ const Form = styled.form`
   height: 100%;
   @media (max-width: 768px) {
     flex: auto;
-    height: 55%;
+    height: 50%;
   }
 `
 const Input = styled.input`
@@ -199,6 +199,9 @@ const Input = styled.input`
   :focus {
     outline: none;
   }
+  &:last-of-type {
+    margin-bottom: 0;
+  }
 `
 const UpdateButton = styled.button`
   background: transparent;
@@ -208,7 +211,7 @@ const UpdateButton = styled.button`
   cursor: pointer;
   font-size: 1.5rem;
   padding: 15px;
-  margin: 15px 0;
+  margin: 5px 0 15px 0;
   :hover {
     background: #444;
   }
