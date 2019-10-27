@@ -98,7 +98,7 @@ class Register extends React.Component {
           <DashboardLink
             onClick={() => this.props.history.push('/teacher-portal')}
           >
-            Go To Dashboard
+            Go To Portal
           </DashboardLink>
         </Form>
       </Container>
