@@ -26,7 +26,7 @@ class Dashboard extends Component {
   }
 
   handleFilterChange = e => {
-    localStorage.setItem('filterItem', e.target.value)
+    localStorage.setItem('PP:dashboardFilter', e.target.value)
     this.setState({ track: e.target.value })
   }
   render() {
