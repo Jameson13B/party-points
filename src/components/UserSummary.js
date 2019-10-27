@@ -7,7 +7,7 @@ const UserSummary = props => {
   return (
     <CustomLink to={`profile/${props.user.id}`}>
       <User data-id={props.user.id}>
-        <Initials>{getInitials(props.user.name)}</Initials>
+        <Initials>{getInitials(props.user)}</Initials>
         <Name>{props.user.name.substring(0, 20)}</Name>
         <Balance>{props.user.balance}</Balance>
       </User>
