@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import { database, auth } from '../firebase'
+// import { Link } from 'react-router-dom'
+import { auth } from '../firebase'
 import styled from 'styled-components'
-import Icon from '../components/Icon'
+// import Icon from '../components/Icon'
 
 class Student extends Component {
   componentDidMount() {
@@ -59,7 +59,7 @@ class Student extends Component {
               <Icon icon='person_add' />
             </CstmLink>
           </IconBtn>
-        </BtnPanel>
+        </BtnPanel> */}
         <Logout
           onClick={() => {
             auth.signOut()
@@ -67,7 +67,7 @@ class Student extends Component {
         >
           Logout
         </Logout>
-        <br /> */}
+        <br />
       </Container>
     )
   }
@@ -94,36 +94,36 @@ const Title = styled.h1`
     font-size: 1.5rem;
   }
 `
-const BtnPanel = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  width: 65%;
-  @media (max-width: 600px) {
-    width: 100%;
-  }
-`
-const IconBtn = styled.div`
-  border: 1px solid white;
-  border-radius: 15px;
-  cursor: pointer;
-  margin-top: 15px;
-  padding: 15px;
-  text-align: center;
-  width: 30%;
-  :hover {
-    background: #444;
-  }
-  i {
-    display: block;
-    padding: 15px;
-  }
-`
-const CstmLink = styled(Link)`
-  color: white;
-  font-size: 1.25rem;
-  text-decoration: none;
-`
+// const BtnPanel = styled.div`
+//   display: flex;
+//   flex-wrap: wrap;
+//   justify-content: space-evenly;
+//   width: 65%;
+//   @media (max-width: 600px) {
+//     width: 100%;
+//   }
+// `
+// const IconBtn = styled.div`
+//   border: 1px solid white;
+//   border-radius: 15px;
+//   cursor: pointer;
+//   margin-top: 15px;
+//   padding: 15px;
+//   text-align: center;
+//   width: 30%;
+//   :hover {
+//     background: #444;
+//   }
+//   i {
+//     display: block;
+//     padding: 15px;
+//   }
+// `
+// const CstmLink = styled(Link)`
+//   color: white;
+//   font-size: 1.25rem;
+//   text-decoration: none;
+// `
 const Logout = styled.h1`
   margin: 20px auto;
   text-decoration: none;

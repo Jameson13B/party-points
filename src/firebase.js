@@ -16,6 +16,8 @@ const Firebase = firebase.initializeApp(firebaseConfig)
 
 // Database instance
 export const database = Firebase.firestore()
+export const serverTimestamp = () =>
+  firebase.firestore.FieldValue.serverTimestamp()
 
 // Authorization instance
 export const auth = Firebase.auth()
