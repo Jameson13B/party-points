@@ -30,6 +30,6 @@ function App() {
 export default App
 
 // Dashboard
-//   Select Class
+//   Pending add points by class
 // Reporting
 // Store

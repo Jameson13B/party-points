@@ -24,6 +24,41 @@ class NegBtnList extends Component {
     }
   }
   toggleDeleting = () => this.setState({ deleting: !this.state.deleting })
+  handleRemovePoints = (e, button) => {
+    e.preventDefault()
+    if (this.state.deleting) {
+      // Delete Button from firebase
+      database
+        .collection('negative')
+        .doc(button.id)
+        .delete()
+        .then(() => this.setState({ feedback: 'Successfully Deleted' }))
+        .catch(() => this.setState({ feedback: 'Failed to Delete' }))
+    } else {
+      // Remove Points from User
+      const logRef = database.collection('log').doc()
+      const userRef = database.collection('users').doc(this.props.id)
+
+      database
+        .runTransaction(transaction => {
+          return transaction.get(userRef).then(user => {
+            const newBalance = user.data().balance - button.points
+            transaction.update(userRef, { balance: newBalance })
+            transaction.set(logRef, {
+              change: -button.points,
+              description: button.title,
+              user: user.id,
+              date: serverTimestamp()
+            })
+          })
+        })
+        .then(() => {
+          console.log('Successfully Removed from Users Balance')
+          this.props.history.replace('/dashboard')
+        })
+        .catch(err => console.log('Error Removing from Users Balance', err))
+    }
+  }
   render() {
     return (
       <Container>
@@ -33,49 +68,7 @@ class NegBtnList extends Component {
               <Button
                 key={button.id}
                 deleting={this.state.deleting}
-                onClick={e => {
-                  e.preventDefault()
-                  if (this.state.deleting) {
-                    // Delete Button from firebase
-                    database
-                      .collection('negative')
-                      .doc(button.id)
-                      .delete()
-                      .then(() =>
-                        this.setState({ feedback: 'Successfully Deleted' })
-                      )
-                      .catch(() =>
-                        this.setState({ feedback: 'Failed to Delete' })
-                      )
-                  } else {
-                    // Remove Points from User
-                    const logRef = database.collection('log').doc()
-                    const userRef = database
-                      .collection('users')
-                      .doc(this.props.id)
-
-                    database
-                      .runTransaction(transaction => {
-                        return transaction.get(userRef).then(user => {
-                          const newBalance = user.data().balance - button.points
-                          transaction.update(userRef, { balance: newBalance })
-                          transaction.set(logRef, {
-                            change: -button.points,
-                            description: button.title,
-                            user: user.id,
-                            date: serverTimestamp()
-                          })
-                        })
-                      })
-                      .then(() => {
-                        console.log('Successfully Removed from Users Balance')
-                        this.props.history.replace('/dashboard')
-                      })
-                      .catch(err =>
-                        console.log('Error Removing from Users Balance', err)
-                      )
-                  }
-                }}
+                onClick={e => this.handleRemovePoints(e, button)}
               >
                 <p>{button.title}</p>
                 {!this.state.deleting ? (
@@ -113,7 +106,7 @@ const List = styled.ul`
   height: 85%;
   list-style: none;
   justify-content: space-evenly;
-  padding-bottom: 25px;
+  padding: 0 0 25px 0;
 `
 const Button = styled.li`
   border: 1px solid white;

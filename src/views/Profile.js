@@ -23,7 +23,49 @@ class Profile extends Component {
   handleTogglePos = bool => this.setState({ positive: bool })
   handleLoading = () => <h2>Loading...</h2>
   render() {
-    // If a profile is for a student:
+    const id = this.props.match.params.id
+
+    // If the profile is for a class:
+    if (id.includes('Class')) {
+      return (
+        <Container>
+          <View>
+            <Header>
+              <CstmLink to='/dashboard'>
+                <Icon icon='arrow_back' />
+              </CstmLink>
+              <h3>Profile</h3>
+            </Header>
+            <Body>
+              <Name>{id}</Name>
+              <Id>{id}</Id>
+              <Item>Add/Remove points for the entire {id}</Item>
+              <BtnPanel>
+                <Btn
+                  onClick={() => this.handleTogglePos(true)}
+                  className={this.state.positive && 'active'}
+                >
+                  Positive
+                </Btn>
+                <Btn
+                  onClick={() => this.handleTogglePos(false)}
+                  className={!this.state.positive && 'active'}
+                >
+                  Needs Improvement
+                </Btn>
+              </BtnPanel>
+              {this.state.positive ? (
+                <PosBtnList id={id} history={this.props.history} />
+              ) : (
+                <NegBtnList id={id} history={this.props.history} />
+              )}
+            </Body>
+          </View>
+        </Container>
+      )
+    }
+
+    // If the profile is for a student:
     return (
       <Container>
         <View>
