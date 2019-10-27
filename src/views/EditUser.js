@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Icon from '../components/Icon'
 import UpdateUser from '../components/UpdateUser'
 import UserDelete from '../components/UserDelete'
-// import UserPassword from '../components/PasswordUser'
+import UserPassword from '../components/UserPassword'
 
 class EditUser extends Component {
   constructor(props) {
@@ -49,7 +49,7 @@ class EditUser extends Component {
           </Nav>
           {this.state.view === 'update' ? <UpdateUser /> : null}
           {this.state.view === 'delete' ? <UserDelete /> : null}
-          {/* {this.state.view === 'password' ? <UserPassword /> : null} */}
+          {this.state.view === 'password' ? <UserPassword /> : null}
         </Body>
       </Container>
     )

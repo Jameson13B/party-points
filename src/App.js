@@ -1,6 +1,7 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import Teacher from './views/Teacher'
+import Student from './views/Student'
 import Login from './views/Login'
 import Register from './views/Register'
 import Dashboard from './views/Dashboard'
@@ -14,7 +15,7 @@ function App() {
         <Route path='/login' component={Login} />
         <Route path='/register' component={Register} />
         <Route path='/teacher-portal' component={Teacher} />
-        <Route path='/student-portal' component={Teacher} />
+        <Route path='/student-portal' component={Student} />
         <Route path='/dashboard' component={Dashboard} />
         {/* <Route path='/reporting' component={Reports} /> */}
         {/* <Route path='/store' component={Store} /> */}
@@ -26,8 +27,6 @@ function App() {
 
 export default App
 
-// Edit User
-//   Password
 // Dashboard
 //   Select User
 //   Select Class
