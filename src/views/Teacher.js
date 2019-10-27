@@ -35,7 +35,7 @@ const Teacher = props => {
           </CstmLink>
         </IconBtn>
         <IconBtn>
-          <CstmLink to='/reports'>
+          <CstmLink to='/reporting'>
             <p>Reporting</p>
             <Icon icon='description' />
           </CstmLink>
