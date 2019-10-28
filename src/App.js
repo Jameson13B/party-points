@@ -6,6 +6,7 @@ import Login from './views/Login'
 import Register from './views/Register'
 import Dashboard from './views/Dashboard'
 import Profile from './views/Profile'
+import Reporting from './views/Reporting'
 import EditUser from './views/EditUser'
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
         <Route path='/student-portal' component={Student} />
         <Route path='/dashboard' component={Dashboard} />
         <Route path='/profile/:id' component={Profile} />
-        {/* <Route path='/reporting' component={Reports} /> */}
+        <Route path='/reporting' component={Reporting} />
         {/* <Route path='/store' component={Store} /> */}
         <Route path='/edit-user' component={EditUser} />
       </Switch>
@@ -32,4 +33,5 @@ export default App
 // Dashboard
 //   Pending add points by class
 // Reporting
+//   Pending filter by dates
 // Store
