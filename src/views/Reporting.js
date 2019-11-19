@@ -90,22 +90,24 @@ class Reporting extends Component {
             {this.state.logs.length === 0 && (
               <Entry>Nothing to show yet...</Entry>
             )}
-            {this.state.logs.map(log => {
-              const date = moment(log.date.toDate())
-              // If there is only the default change return 'select student'
-              return !log.change ? (
-                <Entry key={log.id}>
-                  <p>Select Student Above</p>
-                </Entry>
-              ) : (
-                // Else if there is a log with change, create an Entry for each
-                <Entry key={log.id}>
-                  <p>{log.change}</p>
-                  <p>{log.description}</p>
-                  <p>{date.tz('America/Boise').format('l LT')}</p>
-                </Entry>
-              )
-            })}
+            {this.state.logs
+              .sort((a, b) => (a.date < b.date ? 1 : -1))
+              .map(log => {
+                const date = moment(log.date.toDate())
+                // If there is only the default change return 'select student'
+                return !log.change ? (
+                  <Entry key={log.id}>
+                    <p>Select Student Above</p>
+                  </Entry>
+                ) : (
+                  // Else if there is a log with change, create an Entry for each
+                  <Entry key={log.id}>
+                    <p>{log.change}</p>
+                    <p>{log.description}</p>
+                    <p>{date.tz('America/Boise').format('l LT')}</p>
+                  </Entry>
+                )
+              })}
           </Body>
         </View>
       </Container>
