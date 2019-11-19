@@ -1,5 +1,5 @@
 import React from 'react'
-import { database, functions } from '../firebase'
+import { auth, database, functions } from '../firebase'
 import styled from 'styled-components'
 
 class Register extends React.Component {
@@ -12,6 +12,21 @@ class Register extends React.Component {
       name: '',
       error: null
     }
+  }
+  componentDidMount() {
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        database
+          .collection('users')
+          .doc(user.uid)
+          .get()
+          .then(doc => {
+            if (doc.data().track !== 'Teacher') {
+              this.props.history.push('/student-portal')
+            }
+          })
+      }
+    })
   }
 
   handleRegister = e => {
@@ -69,7 +84,7 @@ class Register extends React.Component {
             value={this.state.name}
             onChange={e => this.setState({ name: e.target.value })}
           />
-          <Label>Track:</Label>
+          <Label>Class:</Label>
           <Input
             autoComplete='off'
             type='text'
