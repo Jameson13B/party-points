@@ -24,6 +24,32 @@ class NegBtnList extends Component {
     }
   }
   toggleDeleting = () => this.setState({ deleting: !this.state.deleting })
+  handleClassRemove = (e, button) => {
+    e.preventDefault()
+
+    const logRef = database.collection('log').doc()
+    database
+      .collection('users')
+      .where('track', '==', this.props.id.split(' ')[0])
+      .get()
+      .then(res => {
+        res.docs.forEach(doc => {
+          const docRef = database.collection('users').doc(doc.id)
+
+          docRef.update({
+            balance: doc.data().balance - button.points
+          })
+
+          logRef.set({
+            change: -button.points,
+            description: button.title,
+            user: doc.id,
+            date: serverTimestamp()
+          })
+        })
+        this.props.history.replace('/dashboard')
+      })
+  }
   handleRemovePoints = (e, button) => {
     e.preventDefault()
     if (this.state.deleting) {
@@ -68,7 +94,11 @@ class NegBtnList extends Component {
               <Button
                 key={button.id}
                 deleting={this.state.deleting}
-                onClick={e => this.handleRemovePoints(e, button)}
+                onClick={e =>
+                  this.props.id.includes('Class')
+                    ? this.handleClassRemove(e, button)
+                    : this.handleRemovePoints(e, button)
+                }
               >
                 <p>{button.title}</p>
                 {!this.state.deleting ? (
