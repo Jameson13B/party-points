@@ -108,7 +108,7 @@ const IconBtn = styled.div`
   margin-top: 15px;
   padding: 15px;
   text-align: center;
-  width: 30%;
+  width: 25%;
   :hover {
     background: #444;
   }
