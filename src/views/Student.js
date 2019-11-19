@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-// import { Link } from 'react-router-dom'
 import { auth, database } from '../firebase'
 import styled from 'styled-components'
-// import Icon from '../components/Icon'
 
 class Student extends Component {
   constructor(props) {
