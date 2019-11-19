@@ -38,7 +38,6 @@ class Profile extends Component {
             </Header>
             <Body>
               <Name>{id}</Name>
-              <Id>{id}</Id>
               <Item>Add/Remove points for the entire {id}</Item>
               <BtnPanel>
                 <Btn
@@ -81,7 +80,6 @@ class Profile extends Component {
             ) : (
               <React.Fragment>
                 <Name>{this.state.user.name}</Name>
-                <Id>{this.state.user.id}</Id>
                 <Item>Balance: {this.state.user.balance}</Item>
                 <Item>{this.state.user.email}</Item>
                 <BtnPanel>
@@ -161,13 +159,6 @@ const Name = styled.h1`
   font-weight: bold;
   line-height: 100%;
   margin: 5px 0 10px 0;
-`
-const Id = styled.p`
-  font-size: 0.75rem;
-  font-weight: normal;
-  font-style: italic;
-  color: #aaa;
-  margin: 0;
 `
 const Item = styled.p`
   margin: 10px 0;
