@@ -1,65 +1,48 @@
 import React, { Component } from 'react'
 // import { Link } from 'react-router-dom'
-import { auth } from '../firebase'
+import { auth, database } from '../firebase'
 import styled from 'styled-components'
 // import Icon from '../components/Icon'
 
 class Student extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      user: null
+    }
+  }
   componentDidMount() {
-    // auth.onAuthStateChanged(user => {
-    //   if (user) {
-    //     database
-    //       .collection('users')
-    //       .doc(user.uid)
-    //       .get()
-    //       .then(doc => {
-    //         console.log(doc.data().track)
-    //         if (doc.data().track !== 'Teacher') {
-    //           console.log('No Teacher')
-    //           this.props.history.push('/student-portal')
-    //         }
-    //       })
-    //   } else {
-    //     this.props.history.push('/login')
-    //   }
-    // })
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        database
+          .collection('users')
+          .doc(user.uid)
+          .get()
+          .then(doc => {
+            this.setState({ user: { ...doc.data(), id: doc.id } })
+          })
+      } else {
+        this.props.history.push('/login')
+      }
+    })
   }
   render() {
+    if (!this.state.user) {
+      return (
+        <Container>
+          <h1>Loading</h1>
+        </Container>
+      )
+    }
+
     return (
       <Container>
-        <Title>Party Points Student Page</Title>
-        {/* <BtnPanel>
-          <IconBtn>
-            <CstmLink to='/dashboard'>
-              <p>Dashboard</p>
-              <Icon icon='dashboard' />
-            </CstmLink>
-          </IconBtn>
-          <IconBtn>
-            <CstmLink to='/reports'>
-              <p>Reporting</p>
-              <Icon icon='description' />
-            </CstmLink>
-          </IconBtn>
-          <IconBtn>
-            <CstmLink to='/store'>
-              <p>Store</p>
-              <Icon icon='store' />
-            </CstmLink>
-          </IconBtn>
-          <IconBtn>
-            <CstmLink to='/edit-user'>
-              <p>Edit User</p>
-              <Icon icon='person' />
-            </CstmLink>
-          </IconBtn>
-          <IconBtn>
-            <CstmLink to='/register'>
-              <p>New User</p>
-              <Icon icon='person_add' />
-            </CstmLink>
-          </IconBtn>
-        </BtnPanel> */}
+        <Name>Hey {this.state.user.name}!</Name>
+        <Balance>
+          Your party point balance is
+          <CurBalance>{this.state.user.balance}</CurBalance>
+        </Balance>
+        <Email>Email: {this.state.user.email}</Email>
         <Logout
           onClick={() => {
             auth.signOut()
@@ -86,49 +69,34 @@ const Container = styled.div`
   a {
     margin: 30px auto;
   }
-`
-const Title = styled.h1`
-  font-size: 2.5rem;
-  margin: 30px auto;
-  @media (max-width: 600px) {
-    font-size: 1.5rem;
+  h1 {
+    margin: 25px 0;
+    :nth-child(1) {
+      margin-top: 0;
+    }
   }
 `
-// const BtnPanel = styled.div`
-//   display: flex;
-//   flex-wrap: wrap;
-//   justify-content: space-evenly;
-//   width: 65%;
-//   @media (max-width: 600px) {
-//     width: 100%;
-//   }
-// `
-// const IconBtn = styled.div`
-//   border: 1px solid white;
-//   border-radius: 15px;
-//   cursor: pointer;
-//   margin-top: 15px;
-//   padding: 15px;
-//   text-align: center;
-//   width: 30%;
-//   :hover {
-//     background: #444;
-//   }
-//   i {
-//     display: block;
-//     padding: 15px;
-//   }
-// `
-// const CstmLink = styled(Link)`
-//   color: white;
-//   font-size: 1.25rem;
-//   text-decoration: none;
-// `
+const Name = styled.h1`
+  font-size: 3.5rem;
+`
+const Balance = styled.h1`
+  font-size: 2.25rem;
+`
+const CurBalance = styled.p`
+  text-align: center;
+  font-size: 3.5rem;
+  font-weight: 900;
+  margin: 20px 0 0;
+`
+const Email = styled.h1`
+  font-size: 1.5rem;
+`
 const Logout = styled.h1`
+  background: #3e4450;
+  border-radius: 10px;
   margin: 20px auto;
-  text-decoration: none;
+  padding: 10px;
   :hover {
     cursor: pointer;
-    text-decoration: underline;
   }
 `
