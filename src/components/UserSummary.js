@@ -32,14 +32,21 @@ const User = styled.div`
 const CustomLink = styled(Link)`
   text-decoration: none;
   color: white;
-  width: 45%;
+  width: 30%;
   @media (max-width: 768px) {
+    width: 45%;
+  }
+  @media (max-width: 425px) {
     width: 100%;
   }
 `
 const Initials = styled.h1`
-  font-size: 2.5rem;
-  margin: auto 25px;
+  font-size: 2.25rem;
+  margin: auto 20px;
+  @media (max-width: 768px) {
+    font-size: 2rem;
+    margin-right: 15px;
+  }
 `
 const Name = styled.h1`
   flex: 3;
