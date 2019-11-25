@@ -33,12 +33,12 @@ class Login extends React.Component {
 
     auth
       .signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then(() => this.props.history.push('/teacher-portal'))
+      .then(() => this.props.history.push('/student-portal'))
       .catch(error => this.setState({ error: error.message }))
   }
   render() {
     if (this.state.user) {
-      return <Redirect to='/teacher-portal' />
+      return <Redirect to='/student-portal' />
     } else {
       return (
         <Container>

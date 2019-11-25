@@ -17,7 +17,11 @@ class Student extends Component {
           .doc(user.uid)
           .get()
           .then(doc => {
-            this.setState({ user: { ...doc.data(), id: doc.id } })
+            if (doc.data().track === 'Teacher') {
+              this.props.history.push('/teacher-portal')
+            } else {
+              this.setState({ user: { ...doc.data(), id: doc.id } })
+            }
           })
       } else {
         this.props.history.push('/login')
