@@ -27,31 +27,54 @@ class NegBtnList extends Component {
   handleClassRemove = (e, button) => {
     e.preventDefault()
 
-    const logRef = database.collection('log').doc()
-    database
-      .collection('users')
-      .where('track', '==', this.props.id.split(' ')[0])
-      .get()
-      .then(res => {
-        res.docs.forEach(doc => {
-          const docRef = database.collection('users').doc(doc.id)
+    if (this.state.deleting) {
+      // Delete Button from Firebase
+      database
+        .collection('negative')
+        .doc(button.id)
+        .delete()
+        .then(() => this.setState({ feedback: 'Successfully Deleted' }))
+        .catch(() => this.setState({ feedback: 'Failed to Deleted' }))
+    } else if (isNaN(button.points)) {
+      alert('This buttons point value is not a number')
+    } else {
+      const logRef = database.collection('log').doc()
 
-          docRef.update({
-            balance: doc.data().balance - button.points
-          })
+      database
+        .collection('users')
+        .where('track', '==', this.props.id.split(' ')[0])
+        .get()
+        .then(res => {
+          res.docs.forEach(doc => {
+            const docRef = database.collection('users').doc(doc.id)
 
-          logRef.set({
-            change: -button.points,
-            description: button.title,
-            user: doc.id,
-            date: serverTimestamp()
+            docRef
+              .update({
+                balance: doc.data().balance - button.points
+              })
+              .catch(err => {
+                throw err
+              })
+
+            logRef.set({
+              change: -button.points,
+              description: button.title,
+              user: doc.id,
+              balance: doc.data().balance - button.points,
+              date: serverTimestamp()
+            })
           })
+          this.props.history.replace('/dashboard')
         })
-        this.props.history.replace('/dashboard')
-      })
+        .catch(err => {
+          console.log(err)
+          alert(err)
+        })
+    }
   }
   handleRemovePoints = (e, button) => {
     e.preventDefault()
+
     if (this.state.deleting) {
       // Delete Button from firebase
       database
@@ -60,6 +83,8 @@ class NegBtnList extends Component {
         .delete()
         .then(() => this.setState({ feedback: 'Successfully Deleted' }))
         .catch(() => this.setState({ feedback: 'Failed to Delete' }))
+    } else if (isNaN(button.points)) {
+      alert('This buttons point value is not a number')
     } else {
       // Remove Points from User
       const logRef = database.collection('log').doc()
@@ -74,6 +99,7 @@ class NegBtnList extends Component {
               change: -button.points,
               description: button.title,
               user: user.id,
+              balance: user.data().balance - button.points,
               date: serverTimestamp()
             })
           })
@@ -104,8 +130,8 @@ class NegBtnList extends Component {
                 {!this.state.deleting ? (
                   <p>{button.points}</p>
                 ) : (
-                  <CustomIcon icon='delete' />
-                )}
+                    <CustomIcon icon='delete' />
+                  )}
               </Button>
             )
           })}
