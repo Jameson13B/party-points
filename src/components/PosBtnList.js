@@ -149,40 +149,40 @@ class PosBtnList extends Component {
 export default PosBtnList
 
 const Container = styled.div`
-  margin: 25px auto
-  max-width: 600px
-  width: 90%
+  margin: 25px auto;
+  max-width: 600px;
+  width: 90%;
 `
 const List = styled.ul`
-  align-content: space-between
-  border: 1px solid white
-  border-radius: 15px
-  display flex
-  flex-wrap: wrap
-  height: 85%
-  list-style: none
-  justify-content: space-evenly
-  padding: 0 0 25px 0
+  align-content: space-between;
+  border: 1px solid white;
+  border-radius: 15px;
+  display flex;
+  flex-wrap: wrap;
+  height: 85%;
+  list-style: none;
+  justify-content: space-evenly;
+  padding: 0 0 25px 0;
 `
 const Button = styled.li`
-  border: 1px solid white
-  border-radius: 15px
-  padding: 1% 0
-  cursor: pointer
-  width: 30%
-  font-size: 1rem
-  margin-top: 25px
+  border: 1px solid white;
+  border-radius: 15px;
+  padding: 1% 0;
+  cursor: pointer;
+  width: 30%;
+  font-size: 1rem;
+  margin-top: 25px;
   :hover {
-    background: #444
-    border: ${props => props.deleting && '1px solid red'}
+    background: #444;
+    border: ${props => props.deleting && '1px solid red'};
     i {
-      color: ${props => props.deleting && 'red'}
+      color: ${props => props.deleting && 'red'};
     }
   }
 `
 const CustomIcon = styled(Icon)`
-  margin: 0 5%
+  margin: 0 5%;
   :hover {
-    color: red
+    color: red;
   }
 `
