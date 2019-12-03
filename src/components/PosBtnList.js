@@ -1,91 +1,106 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
-import { database, serverTimestamp } from '../firebase'
-import Icon from '../components/Icon'
-import AddNew from '../components/AddNew'
+import React, { Component } from "react";
+import styled from "styled-components";
+import { database, serverTimestamp } from "../firebase";
+import Icon from "../components/Icon";
+import AddNew from "../components/AddNew";
 
 class PosBtnList extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       buttons: [],
       deleting: false
-    }
+    };
   }
   componentDidMount() {
     if (this.state.buttons.length === 0) {
-      database.collection('positive').onSnapshot(res => {
-        let buttons = []
-        res.forEach(doc => buttons.push({ ...doc.data(), id: doc.id }))
+      database.collection("positive").onSnapshot(res => {
+        let buttons = [];
+        res.forEach(doc => buttons.push({ ...doc.data(), id: doc.id }));
         // Sort buttons by point amount
-        buttons.sort((a, b) => (a.points > b.points ? 1 : -1))
-        this.setState({ buttons })
-      })
+        buttons.sort((a, b) => (a.points > b.points ? 1 : -1));
+        this.setState({ buttons });
+      });
     }
   }
-  toggleDeleting = () => this.setState({ deleting: !this.state.deleting })
+  toggleDeleting = () => this.setState({ deleting: !this.state.deleting });
   handleClassAdd = (e, button) => {
-    e.preventDefault()
-
-    const logRef = database.collection('log').doc()
-    database
-      .collection('users')
-      .where('track', '==', this.props.id.split(' ')[0])
-      .get()
-      .then(res => {
-        res.docs.forEach(doc => {
-          const docRef = database.collection('users').doc(doc.id)
-
-          docRef.update({
-            balance: doc.data().balance + button.points
-          })
-
-          logRef.set({
-            change: button.points,
-            description: button.title,
-            user: doc.id,
-            date: serverTimestamp()
-          })
-        })
-        this.props.history.replace('/dashboard')
-      })
-  }
-  handleAddPoints = (e, button) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (this.state.deleting) {
       // Delete Button from Firebase
       database
-        .collection('positive')
+        .collection("positive")
         .doc(button.id)
         .delete()
-        .then(() => this.setState({ feedback: 'Successfully Deleted' }))
-        .catch(() => this.setState({ feedback: 'Failed to Delete' }))
+        .then(() => this.setState({ feedback: "Successfully Deleted" }))
+        .catch(() => this.setState({ feedback: "Failed to Delete" }));
+    } else if (isNaN(button.points)) {
+      alert("This buttons point value is not a number");
+    } else {
+      const logRef = database.collection("log").doc();
+
+      database
+        .collection("users")
+        .where("track", "==", this.props.id.split(" ")[0])
+        .get()
+        .then(res => {
+          res.docs.forEach(doc => {
+            const docRef = database.collection("users").doc(doc.id);
+
+            docRef.update({
+              balance: doc.data().balance + button.points
+            });
+
+            logRef.set({
+              change: button.points,
+              description: button.title,
+              user: doc.id,
+              date: serverTimestamp()
+            });
+          });
+          this.props.history.replace("/dashboard");
+        });
+    }
+  };
+  handleAddPoints = (e, button) => {
+    e.preventDefault();
+
+    if (this.state.deleting) {
+      // Delete Button from Firebase
+      database
+        .collection("positive")
+        .doc(button.id)
+        .delete()
+        .then(() => this.setState({ feedback: "Successfully Deleted" }))
+        .catch(() => this.setState({ feedback: "Failed to Delete" }));
+    } else if (isNaN(button.points)) {
+      alert("This buttons point value is not a number");
     } else {
       // Add Points to User
-      const logRef = database.collection('log').doc()
-      const userRef = database.collection('users').doc(this.props.id)
+      const logRef = database.collection("log").doc();
+      const userRef = database.collection("users").doc(this.props.id);
 
       database
         .runTransaction(transaction => {
           return transaction.get(userRef).then(user => {
-            const newBalance = user.data().balance + button.points
-            transaction.update(userRef, { balance: newBalance })
+            const newBalance = user.data().balance + button.points;
+            transaction.update(userRef, { balance: newBalance });
             transaction.set(logRef, {
               change: button.points,
               description: button.title,
               user: user.id,
               date: serverTimestamp()
-            })
-          })
+            });
+          });
         })
         .then(() => {
-          console.log('Successfully Adding to Users Balance')
-          this.props.history.replace('/dashboard')
+          console.log("Successfully Adding to Users Balance");
+          this.props.history.replace("/dashboard");
         })
-        .catch(err => console.log('Error Adding to Users Balance', err))
+        .catch(err => console.log("Error Adding to Users Balance", err));
     }
-  }
+  };
   render() {
     return (
       <Container>
@@ -96,38 +111,38 @@ class PosBtnList extends Component {
                 key={button.id}
                 deleting={this.state.deleting}
                 onClick={e =>
-                  this.props.id.includes('Class')
+                  this.props.id.includes("Class")
                     ? this.handleClassAdd(e, button)
                     : this.handleAddPoints(e, button)
                 }
               >
                 <p>{button.title}</p>
                 {!this.state.deleting ? (
-                  <p>{button.points}</p>
+                  <p>{isNaN(button.points) ? "Error" : button.points}</p>
                 ) : (
-                  <CustomIcon icon='delete' />
+                  <CustomIcon icon="delete" />
                 )}
               </Button>
-            )
+            );
           })}
         </List>
         <AddNew
-          status='positive'
+          status="positive"
           toggleDeleting={this.toggleDeleting}
           id={this.props.id}
         />
       </Container>
-    )
+    );
   }
 }
 
-export default PosBtnList
+export default PosBtnList;
 
 const Container = styled.div`
   margin: 25px auto;
   max-width: 600px;
   width: 90%;
-`
+`;
 const List = styled.ul`
   align-content: space-between;
   border: 1px solid white;
@@ -138,7 +153,7 @@ const List = styled.ul`
   list-style: none;
   justify-content: space-evenly;
   padding: 0 0 25px 0;
-`
+`;
 const Button = styled.li`
   border: 1px solid white;
   border-radius: 15px;
@@ -149,15 +164,15 @@ const Button = styled.li`
   margin-top: 25px;
   :hover {
     background: #444;
-    border: ${props => props.deleting && '1px solid red'};
+    border: ${props => props.deleting && "1px solid red"};
     i {
-      color: ${props => props.deleting && 'red'};
+      color: ${props => props.deleting && "red"};
     }
   }
-`
+`;
 const CustomIcon = styled(Icon)`
   margin: 0 5%;
   :hover {
     color: red;
   }
-`
+`;

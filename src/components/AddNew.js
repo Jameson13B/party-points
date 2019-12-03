@@ -1,39 +1,45 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
-import { database } from '../firebase'
+import React, { Component } from "react";
+import styled from "styled-components";
+import { database } from "../firebase";
 
 class AddNew extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      points: '',
-      title: '',
+      points: "",
+      title: "",
       deleting: false
-    }
+    };
   }
   handleSave = () => {
-    // Create new button
-    const button = {
-      title: this.state.title,
-      points: parseInt(this.state.points)
+    if (!this.state.title || !this.state.points) {
+      alert("Title and amount cannot be blank");
+    } else if (isNaN(this.state.points)) {
+      alert("Amount must be a number");
+    } else {
+      // Create new button
+      const button = {
+        title: this.state.title,
+        points: parseInt(this.state.points)
+      };
+      // Add to database
+      database
+        .collection(this.props.status)
+        .add(button)
+        .then(() => this.setState({ points: "", title: "" }))
+        .catch(() => alert("Error Adding: Please try again"));
     }
-    // Add to database
-    database
-      .collection(this.props.status)
-      .add(button)
-      .then(() => this.setState({ points: '', title: '' }))
-      .catch(() => alert('Error Adding: Please try again'))
-  }
+  };
   handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value })
-  }
+    this.setState({ [e.target.name]: e.target.value });
+  };
   render() {
     return (
       <Container>
         <Button
           onClick={() => {
-            this.props.toggleDeleting()
-            this.setState({ deleting: !this.state.deleting })
+            this.props.toggleDeleting();
+            this.setState({ deleting: !this.state.deleting });
           }}
         >
           {this.state.deleting ? <p>Done</p> : <p>Delete</p>}
@@ -42,30 +48,30 @@ class AddNew extends Component {
           <p>Add New</p>
         </Button>
         <Input
-          name='points'
+          name="points"
           value={this.state.points}
-          placeholder='Points'
+          placeholder="Points"
           onChange={this.handleChange}
-          autoComplete='off'
+          autoComplete="off"
         />
         <Input
-          name='title'
+          name="title"
           value={this.state.title}
-          placeholder='Title'
+          placeholder="Title"
           onChange={this.handleChange}
-          autoComplete='off'
+          autoComplete="off"
         />
       </Container>
-    )
+    );
   }
 }
 
-export default AddNew
+export default AddNew;
 
 const Container = styled.form`
   display: flex;
   padding: 25px 15px;
-`
+`;
 const Button = styled.div`
   align-items: center;
   border: 1px solid white;
@@ -86,7 +92,7 @@ const Button = styled.div`
   :nth-child(2) {
     margin: 0 15px;
   }
-`
+`;
 const Input = styled.input`
   background: transparent;
   border-top: 0;
@@ -103,4 +109,4 @@ const Input = styled.input`
     margin-left: 15px;
     width: 60%;
   }
-`
+`;
