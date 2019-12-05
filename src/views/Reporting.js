@@ -13,7 +13,7 @@ class Reporting extends Component {
       logs: [],
       student: '',
       start: '',
-      end: ''
+      end: '',
     }
   }
   componentDidMount() {
@@ -39,20 +39,21 @@ class Reporting extends Component {
       .collection('log')
       .where('user', '==', student)
       .onSnapshot(res => {
-        console.log('STUDENT', student)
         let logs = []
         res.forEach(doc => logs.push({ ...doc.data(), id: doc.id }))
         this.setState({ student, logs })
       })
   }
   render() {
+    const { start, end } = this.state
+
     return (
       <Container>
         <View>
           {/* Header */}
           <Header>
-            <CstmLink to='/'>
-              <Icon icon='home' />
+            <CstmLink to="/">
+              <Icon icon="home" />
             </CstmLink>
             <h3>Reporting</h3>
             {/* Student Dropodown */}
@@ -60,7 +61,7 @@ class Reporting extends Component {
               onChange={e => this.handleStudentSelect(e, e.target.value)}
               value={this.state.student}
             >
-              <option value=''>Select Student</option>
+              <option value="">Select Student</option>
               {this.state.students.map(student => (
                 <option value={student.id} key={student.id}>
                   {student.name}
@@ -70,16 +71,16 @@ class Reporting extends Component {
             {/* Start Date */}
             <DateLabel>Start: </DateLabel>
             <DateInput
-              type='date'
-              name='start'
+              type="date"
+              name="start"
               value={this.state.start}
               onChange={this.handleInputChange}
             />
             {/* End Date */}
             <DateLabel>End: </DateLabel>
             <DateInput
-              type='date'
-              name='end'
+              type="date"
+              name="end"
               value={this.state.end}
               onChange={this.handleInputChange}
             />
@@ -87,10 +88,14 @@ class Reporting extends Component {
           {/* Body */}
           <Body>
             {/* If log is empty return 'nothing to show' */}
-            {this.state.logs.length === 0 && (
-              <Entry>Nothing to show yet...</Entry>
-            )}
+            {this.state.logs.length === 0 && <Entry>Nothing to show yet...</Entry>}
             {this.state.logs
+              .filter(log =>
+                start && end
+                  ? log.date.toMillis() > moment(start).format('x') &&
+                    log.date.toMillis() <= moment(end + ' 23:59:59').format('x')
+                  : true,
+              )
               .sort((a, b) => (a.date < b.date ? 1 : -1))
               .map(log => {
                 const date = moment(log.date.toDate())
