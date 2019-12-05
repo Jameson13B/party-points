@@ -73,7 +73,6 @@ class Dashboard extends Component {
           {/* If class is filtered show class button */}
           {this.state.track !== 'All' && <UserSummary user={classUser} />}
           {/* List all users for current filter */}
-          {console.log(users)}
           {users
             .sort((a, b) => {
               return a.name > b.name ? 1 : -1
