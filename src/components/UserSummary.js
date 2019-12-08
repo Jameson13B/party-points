@@ -36,7 +36,7 @@ const CustomLink = styled(Link)`
   @media (max-width: 768px) {
     width: 45%;
   }
-  @media (max-width: 425px) {
+  @media (max-width: 600px) {
     width: 100%;
   }
 `
