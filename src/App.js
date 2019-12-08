@@ -7,22 +7,23 @@ import Register from './views/Register'
 import Dashboard from './views/Dashboard'
 import Profile from './views/Profile'
 import Reporting from './views/Reporting'
+import Store from './views/Store'
 import EditUser from './views/EditUser'
 
 function App() {
   return (
     <div>
       <Switch>
-        <Route exact path='/' component={Login} />
-        <Route path='/login' component={Login} />
-        <Route path='/register' component={Register} />
-        <Route path='/teacher-portal' component={Teacher} />
-        <Route path='/student-portal' component={Student} />
-        <Route path='/dashboard' component={Dashboard} />
-        <Route path='/profile/:id' component={Profile} />
-        <Route path='/reporting' component={Reporting} />
-        {/* <Route path='/store' component={Store} /> */}
-        <Route path='/edit-user' component={EditUser} />
+        <Route exact path="/" component={Login} />
+        <Route path="/login" component={Login} />
+        <Route path="/register" component={Register} />
+        <Route path="/teacher-portal" component={Teacher} />
+        <Route path="/student-portal" component={Student} />
+        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/profile/:id" component={Profile} />
+        <Route path="/reporting" component={Reporting} />
+        <Route path="/store" component={Store} />
+        <Route path="/edit-user" component={EditUser} />
       </Switch>
     </div>
   )
@@ -30,6 +31,8 @@ function App() {
 
 export default App
 
-// Reporting
-//   Pending filter by dates
-// Store
+// Edit Store
+// Student Store
+// Mobile Optimized
+// // Reporting
+// // Height on all
