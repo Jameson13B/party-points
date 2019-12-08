@@ -8,7 +8,7 @@ const firebaseConfig = {
   storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_MESSAING_SENDER_ID,
   appId: process.env.REACT_APP_APP_ID,
-  measurementId: process.env.REACT_APP_MEASUREMENT_ID
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 }
 
 // Initialize Firebase
@@ -16,8 +16,7 @@ const Firebase = firebase.initializeApp(firebaseConfig)
 
 // Database instance
 export const database = Firebase.firestore()
-export const serverTimestamp = () =>
-  firebase.firestore.FieldValue.serverTimestamp()
+export const serverTimestamp = () => firebase.firestore.FieldValue.serverTimestamp()
 
 // Authorization instance
 export const auth = Firebase.auth()
@@ -28,6 +27,4 @@ export const functions = Firebase.functions()
 // Cloud Functions
 export const registerUser = Firebase.functions().httpsCallable('registerUser')
 export const updateUser = Firebase.functions().httpsCallable('updateUser')
-export const changePassword = Firebase.functions().httpsCallable(
-  'changePassword'
-)
+export const changePassword = Firebase.functions().httpsCallable('changePassword')
