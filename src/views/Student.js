@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import { auth, database } from '../firebase'
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
+import Icon from '../components/Icon'
 
 class Student extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      user: null
+      user: null,
     }
   }
   componentDidMount() {
@@ -44,6 +46,10 @@ class Student extends Component {
           Your party point balance is
           <CurBalance>{this.state.user.balance}</CurBalance>
         </Balance>
+        <StoreButton to="/shopping">
+          <Icon icon="shopping_cart" />
+          <ButtonText>Go Shopping</ButtonText>
+        </StoreButton>
         <Email>Email: {this.state.user.email}</Email>
         <Logout
           onClick={() => {
@@ -90,10 +96,28 @@ const CurBalance = styled.p`
   font-weight: 900;
   margin: 20px 0 0;
 `
+const StoreButton = styled(Link)`
+  background: #3e4450;
+  border-radius: 10px;
+  color: white;
+  display: flex;
+  font-weight: bold;
+  align-items: center;
+  margin: 20px auto;
+  padding: 10px;
+  text-decoration: none;
+  :hover {
+    cursor: pointer;
+  }
+`
+const ButtonText = styled.h2`
+  display: inline;
+  margin: 0;=
+`
 const Email = styled.h1`
   font-size: 1.5rem;
 `
-const Logout = styled.h1`
+const Logout = styled.h2`
   background: #3e4450;
   border-radius: 10px;
   margin: 20px auto;
