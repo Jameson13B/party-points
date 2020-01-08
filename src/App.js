@@ -35,6 +35,7 @@ export default App
 
 // Edit Store(Teacher)
 // Handle Purchase Function(Student)
+// Store button is commented out until ready to go live
 // Mobile Optimized
 // // Reporting
 // // Height on all
