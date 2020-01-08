@@ -10,7 +10,7 @@ class Dashboard extends Component {
     super(props)
     this.state = {
       track: localStorage.getItem('PP:dashboardFilter') || 'All',
-      users: []
+      users: [],
     }
   }
 
@@ -18,8 +18,7 @@ class Dashboard extends Component {
     database.collection('users').onSnapshot(res => {
       let users = []
       res.forEach(doc => {
-        if (doc.data().track !== 'Teacher')
-          users.push({ ...doc.data(), id: doc.id })
+        if (doc.data().track !== 'Teacher') users.push({ ...doc.data(), id: doc.id })
       })
       this.setState({ users })
     })
@@ -36,7 +35,7 @@ class Dashboard extends Component {
       id: '',
       name: '',
       balance: '',
-      class: ''
+      class: '',
     }
     if (this.state.track !== 'All') {
       users = this.state.users.filter(user => user.track === this.state.track)
@@ -46,22 +45,20 @@ class Dashboard extends Component {
     }
     // Create list for filter
     let classes = []
-    this.state.users.forEach(
-      user => !classes.includes(user.track) && classes.push(user.track)
-    )
+    this.state.users.forEach(user => !classes.includes(user.track) && classes.push(user.track))
 
     return (
       <Container>
         <Header>
           <CstmLink
-            to='/teacher-portal'
-            onClick={() => localStorage.removeItem('filterItem')}
+            to="/teacher-portal"
+            // onClick={() => localStorage.removeItem('PP:dashboardFilter')}
           >
-            <Icon icon='home' />
+            <Icon icon="home" />
           </CstmLink>
           <h3>Dashboard</h3>
           <Select onChange={this.handleFilterChange} value={this.state.track}>
-            <option value='All'>All</option>
+            <option value="All">All</option>
             {classes.map((clas, i) => (
               <option value={clas} key={i}>
                 {clas.charAt(0).toUpperCase() + clas.slice(1)}
