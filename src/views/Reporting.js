@@ -19,17 +19,10 @@ class Reporting extends Component {
   componentDidMount() {
     database.collection('users').onSnapshot(res => {
       let students = []
-      let logs = []
 
       res.forEach(doc => students.push({ ...doc.data(), id: doc.id }))
 
-      if (this.state.student) {
-        database.collection('log').onSnapshot(res => {
-          res.forEach(doc => logs.push({ ...doc.data(), id: doc.id }))
-        })
-      }
-
-      this.setState({ students, logs })
+      this.setState({ students })
     })
   }
   handleInputChange = e => this.setState({ [e.target.name]: e.target.value })
