@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { auth, database } from '../firebase'
+import { auth, database, serverTimestamp } from '../firebase'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import StoreItem from '../components/StoreItem'
@@ -39,10 +39,47 @@ class Shopping extends Component {
       this.setState({ items })
     })
   }
-  handlePurchase = () => {
-    // Check if purchase amount is equal to or less then balance
-    // Minus from balance, add to log, and add to purchases
-    // Set state.feedback to `Successfully Purchased ${item}` or `Error, try again`
+  handlePurchase = item => {
+    const user = this.state.user
+
+    if (item.amount > user.balance) {
+      this.setState({ feedback: 'Error: Not enough Party Points' })
+    } else {
+      const userRef = database.collection('users').doc(user.id)
+      const logRef = database.collection('log').doc()
+      const purchasesRef = database.collection('purchases').doc()
+      const batch = database.batch()
+
+      batch.update(userRef, { balance: user.balance - item.amount })
+      batch.set(logRef, {
+        change: item.amount,
+        description: item.title,
+        user: user.id,
+        balance: user.balance - item.amount,
+        date: serverTimestamp(),
+      })
+      batch.set(purchasesRef, {
+        change: item.amount,
+        description: `Purchased ${item.title}`,
+        date: serverTimestamp(),
+        postedBy: { id: user.id, name: user.name },
+      })
+
+      batch
+        .commit()
+        .then(() => {
+          this.setState({
+            feedback: `Successfully purchased ${item.title}`,
+            user: { ...user, balance: user.balance - item.amount },
+          })
+        })
+        .catch(err => {
+          console.log(err)
+          this.setState({
+            feedback: 'Error: Please try again',
+          })
+        })
+    }
   }
   render() {
     if (!this.state.user) {
@@ -60,10 +97,10 @@ class Shopping extends Component {
             <Icon icon="home" />
           </CstmLink>
           <h3>Shopping</h3>
-          <CurBal>${this.state.user.balance}</CurBal>
-          {this.state.feedback ? <Feedback>{this.state.feedback}</Feedback> : null}
+          <CurBal>Balance - ${this.state.user.balance}</CurBal>
         </Header>
         <ItemList>
+          {this.state.feedback ? <Feedback>{this.state.feedback}</Feedback> : null}
           {this.state.items.map(item => (
             <StoreItem
               key={item.id}
@@ -75,9 +112,12 @@ class Shopping extends Component {
                   buttons: [
                     {
                       label: 'Yes',
-                      onClick: this.handlePurchase,
+                      onClick: () => this.handlePurchase(item),
                     },
-                    { label: 'No' },
+                    {
+                      label: 'No',
+                      onClick: () => this.setState({ feedback: null }),
+                    },
                   ],
                 })
               }
@@ -117,7 +157,8 @@ const CstmLink = styled(Link)`
   }
 `
 const CurBal = styled.h5`
-  margin-left: 1rem;
+  flex-grow: 2;
+  text-align: right;
 `
 const ItemList = styled.div`
   align-content: flex-start;
@@ -135,6 +176,7 @@ const Feedback = styled.p`
   color: red;
   font-size: 1rem;
   font-style: italic;
-  margin-bottom: 0;
-  margin-left: 1.5rem;
+  margin: 0 0 0 1.5rem;
+  text-align: center;
+  width: 100%;
 `

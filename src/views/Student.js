@@ -46,10 +46,10 @@ class Student extends Component {
           Your party point balance is
           <CurBalance>{this.state.user.balance}</CurBalance>
         </Balance>
-        {/* <StoreButton to="/shopping">
+        <StoreButton to="/shopping">
           <Icon icon="shopping_cart" />
           <ButtonText>Go Shopping</ButtonText>
-        </StoreButton> */}
+        </StoreButton>
         <Email>Email: {this.state.user.email}</Email>
         <Logout
           onClick={() => {
