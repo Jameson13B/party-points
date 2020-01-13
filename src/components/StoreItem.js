@@ -10,7 +10,7 @@ const StoreItem = props => {
         <Title>{props.item.title}</Title>
         <Description>{props.item.description}</Description>
       </Details>
-      <Amount>{props.item.amount}</Amount>
+      <Amount>${props.item.amount}</Amount>
     </Item>
   )
 }
@@ -29,8 +29,12 @@ const Item = styled.div`
   :hover {
     background: #444;
   }
+  @media (max-width: 500px) {
+    width: 90%;
+  }
 `
 const Details = styled.div`
+  flex-grow: 2;
   margin: 0 1rem;
 `
 const Title = styled.p`
