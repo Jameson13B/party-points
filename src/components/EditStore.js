@@ -41,22 +41,28 @@ class EditStore extends Component {
       creating: false,
       index: index,
     })
+  resetState = list => {
+    this.setState({
+      items: list,
+      title: '',
+      description: '',
+      amount: '',
+      id: '',
+      index: '',
+      feedback: null,
+      creating: true,
+    })
+  }
   createItem = newItem => {
+    const { title, amount } = this.state
+    if (!title || !amount) return this.setState({ feedback: 'Missing title or amount' })
+    if (isNaN(amount)) return this.setState({ feedback: 'Amount must be a number' })
+
     const list = [...this.state.items, newItem].sort((a, b) => (a.title > b.title ? 1 : -1))
     database
       .collection('inventory')
       .add(newItem)
-      .then(res =>
-        this.setState({
-          items: list,
-          title: '',
-          description: '',
-          amount: '',
-          id: '',
-          index: '',
-          feedback: null,
-        }),
-      )
+      .then(() => this.resetState(list))
       .catch(feedback => this.setState({ feedback }))
   }
   deleteItem = (index, id) => {
@@ -66,37 +72,20 @@ class EditStore extends Component {
       .collection('inventory')
       .doc(id)
       .delete()
-      .then(() =>
-        this.setState({
-          items: list,
-          title: '',
-          description: '',
-          amount: '',
-          id: '',
-          index: '',
-          feedback: null,
-        }),
-      )
+      .then(() => this.resetState(list))
       .catch(feedback => this.setState({ feedback }))
   }
   updateItem = newItem => {
+    const { title, amount } = this.state
+    if (!title || !amount) return this.setState({ feedback: 'Missing title or amount' })
+    if (isNaN(amount)) return this.setState({ feedback: 'Amount must be a number' })
+
     const list = this.state.items.map(item => (item.id === newItem.id ? newItem : item))
     database
       .collection('inventory')
       .doc(newItem.id)
       .update(newItem)
-      .then(() => {
-        this.setState({
-          items: list,
-          title: '',
-          description: '',
-          amount: '',
-          id: '',
-          index: '',
-          feedback: null,
-          creating: true,
-        })
-      })
+      .then(() => this.resetState(list))
       .catch(feedback => this.setState({ feedback }))
   }
   render() {
@@ -234,5 +223,6 @@ const SubmitBtn = styled.button`
 const Feedback = styled.p`
   color: red;
   font-size: 1rem;
-  margin-top: 5px;
+  margin: 0;
+  text-align: center;
 `
