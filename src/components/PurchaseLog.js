@@ -70,7 +70,7 @@ const Container = styled.div`
 const Entry = styled.div`
   display: flex;
   font-size: 1.5rem;
-  justify-content: space-between
+  justify-content: space-between;
   padding: 15px 10px;
   border-top: 1px solid white;
   p {

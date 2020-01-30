@@ -1,17 +1,14 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import { auth, database } from '../firebase'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Icon from '../components/Icon'
 
-class Student extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      user: null,
-    }
-  }
-  componentDidMount() {
+const Student = props => {
+  const [user, setUser] = useState(null)
+  const [storeOpen, setStoreOpen] = useState(true)
+
+  useEffect(() => {
     auth.onAuthStateChanged(user => {
       if (user) {
         database
@@ -20,48 +17,54 @@ class Student extends Component {
           .get()
           .then(doc => {
             if (doc.data().track === 'Teacher') {
-              this.props.history.push('/teacher-portal')
+              props.history.push('/teacher-portal')
             } else {
-              this.setState({ user: { ...doc.data(), id: doc.id } })
+              setUser({ ...doc.data(), id: doc.id })
             }
           })
       } else {
-        this.props.history.push('/login')
+        props.history.push('/login')
       }
     })
-  }
-  render() {
-    if (!this.state.user) {
-      return (
-        <Container>
-          <h1>Loading</h1>
-        </Container>
-      )
-    }
+    database
+      .collection('settings')
+      .doc('1')
+      .onSnapshot(doc => setStoreOpen(doc.data().storeOpen))
+  }, [props.history, user, storeOpen])
 
-    return (
-      <Container>
-        <Name>Hey {this.state.user.name}!</Name>
-        <Balance>
-          Your party point balance is
-          <CurBalance>{this.state.user.balance}</CurBalance>
-        </Balance>
+  return !user ? (
+    <Container>
+      <h1>Loading</h1>
+    </Container>
+  ) : (
+    <Container>
+      <Name>Hey {user.name}!</Name>
+      <Balance>
+        Your party point balance is
+        <CurBalance>{user.balance}</CurBalance>
+      </Balance>
+      {storeOpen ? (
         <StoreButton to="/shopping">
           <Icon icon="shopping_cart" />
           <ButtonText>Go Shopping</ButtonText>
         </StoreButton>
-        <Email>Email: {this.state.user.email}</Email>
-        <Logout
-          onClick={() => {
-            auth.signOut()
-          }}
-        >
-          Logout
-        </Logout>
-        <br />
-      </Container>
-    )
-  }
+      ) : (
+        <DisabledButton>
+          <Icon icon="remove_shopping_cart" />
+          <ButtonText>Store Closed</ButtonText>
+        </DisabledButton>
+      )}
+      <Email>Email: {user.email}</Email>
+      <Logout
+        onClick={() => {
+          auth.signOut()
+        }}
+      >
+        Logout
+      </Logout>
+      <br />
+    </Container>
+  )
 }
 
 export default Student
@@ -108,6 +111,20 @@ const StoreButton = styled(Link)`
   text-decoration: none;
   :hover {
     cursor: pointer;
+  }
+`
+const DisabledButton = styled.div`
+  background: #3e4450;
+  border-radius: 10px;
+  color: white;
+  display: flex;
+  font-weight: bold;
+  align-items: center;
+  margin: 20px auto;
+  padding: 10px;
+  text-decoration: none;
+  :hover {
+    cursor: not-allowed;
   }
 `
 const ButtonText = styled.h2`

@@ -1,52 +1,80 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import { ToggleSwitch } from 'mx-react-components'
 import Icon from '../components/Icon'
 import PurchaseLog from '../components/PurchaseLog'
 import EditStore from '../components/EditStore'
+import { database } from '../firebase'
 
-class Store extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      view: props.view || 'purchase-log',
-    }
+const Store = () => {
+  const [view, setView] = useState('purchase-log')
+  const [storeOpen, setStoreOpen] = useState(true)
+
+  useEffect(() => {
+    database
+      .collection('settings')
+      .doc('1')
+      .onSnapshot(doc => setStoreOpen(doc.data().storeOpen))
+  }, [storeOpen])
+
+  const toggleStore = () => {
+    database
+      .collection('settings')
+      .doc('1')
+      .update({ storeOpen: !storeOpen })
   }
 
-  handleToggleView = e => this.setState({ view: e.target.getAttribute('name') })
-
-  render() {
-    return (
-      <Container>
-        <Header>
-          <CstmLink to="/teacher-portal">
-            <Icon icon="home" />
-          </CstmLink>
-          <h3>Store Panel</h3>
-        </Header>
-        <Body>
-          <Nav>
-            <NavBtn
-              name="purchase-log"
-              onClick={this.handleToggleView}
-              selected={this.state.view === 'purchase-log'}
-            >
-              Purchase Log
-            </NavBtn>
-            <NavBtn
-              name="edit-store"
-              onClick={this.handleToggleView}
-              selected={this.state.view === 'edit-store'}
-            >
-              Edit Store
-            </NavBtn>
-          </Nav>
-          {this.state.view === 'purchase-log' ? <PurchaseLog /> : null}
-          {this.state.view === 'edit-store' ? <EditStore /> : null}
-        </Body>
-      </Container>
-    )
-  }
+  return (
+    <Container>
+      <Header>
+        <CstmLink to="/teacher-portal">
+          <Icon icon="home" />
+        </CstmLink>
+        <h3>Store Panel</h3>
+        <ToggleSwitch
+          checked={storeOpen}
+          onToggle={toggleStore}
+          showIcons={false}
+          styles={{
+            component: {
+              background: 'transparent',
+              borderColor: 'transparent',
+              ':focus': {
+                outline: 'none',
+              },
+            },
+            trueTrack: {
+              backgroundColor: 'green',
+            },
+            falseTrack: {
+              backgroundColor: 'red',
+            },
+          }}
+        />
+      </Header>
+      <Body>
+        <Nav>
+          <NavBtn
+            name="purchase-log"
+            onClick={() => setView('purchase-log')}
+            selected={view === 'purchase-log'}
+          >
+            Purchase Log
+          </NavBtn>
+          <NavBtn
+            name="edit-store"
+            onClick={() => setView('edit-store')}
+            selected={view === 'edit-store'}
+          >
+            Edit Store
+          </NavBtn>
+        </Nav>
+        {view === 'purchase-log' ? <PurchaseLog /> : null}
+        {view === 'edit-store' ? <EditStore /> : null}
+      </Body>
+    </Container>
+  )
 }
 
 export default Store

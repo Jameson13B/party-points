@@ -13,6 +13,7 @@ class Shopping extends Component {
     this.state = {
       user: null,
       feedback: null,
+      items: [],
     }
   }
   componentDidMount() {
