@@ -8,7 +8,7 @@ class AddNew extends Component {
     this.state = {
       points: '',
       title: '',
-      deleting: false
+      editing: false,
     }
   }
   handleSave = () => {
@@ -20,7 +20,7 @@ class AddNew extends Component {
       // Create new button
       const button = {
         title: this.state.title,
-        points: parseInt(this.state.points)
+        points: parseInt(this.state.points),
       }
       // Add to database
       database
@@ -39,27 +39,27 @@ class AddNew extends Component {
         <Button
           onClick={() => {
             this.props.toggleDeleting()
-            this.setState({ deleting: !this.state.deleting })
+            this.setState({ editing: !this.state.editing })
           }}
         >
-          {this.state.deleting ? <p>Done</p> : <p>Delete</p>}
+          {this.state.editing ? <p>Done</p> : <p>Edit</p>}
         </Button>
         <Button onClick={this.handleSave}>
           <p>Add New</p>
         </Button>
         <Input
-          name='points'
+          name="points"
           value={this.state.points}
-          placeholder='Points'
+          placeholder="Points"
           onChange={this.handleChange}
-          autoComplete='off'
+          autoComplete="off"
         />
         <Input
-          name='title'
+          name="title"
           value={this.state.title}
-          placeholder='Title'
+          placeholder="Title"
           onChange={this.handleChange}
-          autoComplete='off'
+          autoComplete="off"
         />
       </Container>
     )
@@ -84,13 +84,13 @@ const Button = styled.div`
   padding: 10px
   max-width: 15%
   :hover {
-    background: #444
+    background: #444;
   }
   p {
-    margin: 0
+    margin: 0;
   }
   :nth-child(2) {
-    margin: 0 15px
+    margin: 0 15px;
   }
 `
 const Input = styled.input`
