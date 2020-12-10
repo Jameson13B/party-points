@@ -15,16 +15,16 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    database.collection('users').onSnapshot(res => {
+    database.collection('users').onSnapshot((res) => {
       let users = []
-      res.forEach(doc => {
+      res.forEach((doc) => {
         if (doc.data().track !== 'Teacher') users.push({ ...doc.data(), id: doc.id })
       })
       this.setState({ users })
     })
   }
 
-  handleFilterChange = e => {
+  handleFilterChange = (e) => {
     localStorage.setItem('PP:dashboardFilter', e.target.value)
     this.setState({ track: e.target.value })
   }
@@ -38,14 +38,15 @@ class Dashboard extends Component {
       class: '',
     }
     if (this.state.track !== 'All') {
-      users = this.state.users.filter(user => user.track === this.state.track)
+      users = this.state.users.filter((user) => user.track === this.state.track)
       classUser.id = `${this.state.track} Class`
       classUser.name = `${this.state.track} Class`
       classUser.class = this.state.track
+      classUser.active = true
     }
     // Create list for filter
     let classes = []
-    this.state.users.forEach(user => !classes.includes(user.track) && classes.push(user.track))
+    this.state.users.forEach((user) => !classes.includes(user.track) && classes.push(user.track))
 
     return (
       <Container>
@@ -74,7 +75,7 @@ class Dashboard extends Component {
             .sort((a, b) => {
               return a.name > b.name ? 1 : -1
             })
-            .map(user => (
+            .map((user) => (
               <UserSummary key={user.id} user={user} />
             ))}
         </UserList>

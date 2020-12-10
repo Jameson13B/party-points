@@ -1,13 +1,48 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { getInitials } from '../utils'
+import { AttendenceToggle } from './AttendenceToggle'
+import { database } from '../firebase'
 
-const UserSummary = props => {
+const UserSummary = (props) => {
+  const handleToggleAttendence = (e) => {
+    if (props.user.id.includes('Class')) {
+      e.preventDefault()
+    } else {
+      database.collection('users').doc(props.user.id).update({ active: !props.user.active })
+    }
+  }
+  const handlePrevent = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
+  }
+
   return (
-    <CustomLink to={`profile/${props.user.id}`}>
+    <CustomLink onClick={handlePrevent} to={`profile/${props.user.id}`}>
       <User data-id={props.user.id}>
-        <Initials>{getInitials(props.user)}</Initials>
+        {props.user.id.includes('Class') ? (
+          <Initials>{props.user.name.split(' ')[0]}</Initials>
+        ) : (
+          <AttendenceToggle
+            checked={props.user.active}
+            onToggle={handleToggleAttendence}
+            styles={{
+              component: {
+                background: 'transparent',
+                borderColor: 'transparent',
+                ':focus': {
+                  outline: 'none',
+                },
+              },
+              trueTrack: {
+                backgroundColor: 'green',
+              },
+              falseTrack: {
+                backgroundColor: 'red',
+              },
+            }}
+          />
+        )}
         <Name>{props.user.name.substring(0, 20)}</Name>
         <Balance>{props.user.balance}</Balance>
       </User>
@@ -41,10 +76,10 @@ const CustomLink = styled(Link)`
   }
 `
 const Initials = styled.h1`
-  font-size: 2.25rem;
+  font-size: 2rem;
   margin: auto 20px;
   @media (max-width: 768px) {
-    font-size: 2rem;
+    font-size: 1.5rem;
     margin-right: 15px;
   }
 `
