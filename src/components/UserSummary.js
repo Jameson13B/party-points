@@ -6,25 +6,22 @@ import { database } from '../firebase'
 
 const UserSummary = (props) => {
   const handleToggleAttendence = (e) => {
-    if (props.user.id.includes('Class')) {
-      e.preventDefault()
-    } else {
+    e.stopPropagation()
+    e.preventDefault()
+    if (!props.user.id.includes('Class')) {
       database.collection('users').doc(props.user.id).update({ active: !props.user.active })
     }
   }
-  const handlePrevent = (e) => {
-    e.stopPropagation()
-    e.preventDefault()
-  }
 
   return (
-    <CustomLink onClick={handlePrevent} to={`profile/${props.user.id}`}>
+    <CustomLink to={`profile/${props.user.id}`}>
       <User data-id={props.user.id}>
         {props.user.id.includes('Class') ? (
           <Initials>{props.user.name.split(' ')[0]}</Initials>
         ) : (
           <AttendenceToggle
             checked={props.user.active}
+            name="toggle"
             onToggle={handleToggleAttendence}
             styles={{
               component: {
