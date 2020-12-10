@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { database, functions } from '../firebase'
 import { getInitials } from '../utils'
+import Icon from '../components/Icon'
+import { confirmAlert } from 'react-confirm-alert'
+import './alert.css'
 
 class UpdateUser extends Component {
   constructor(props) {
@@ -93,6 +96,29 @@ class UpdateUser extends Component {
       )
       .catch(() => this.setState({ feedback: 'Failed to change password' }))
   }
+  handleDeleteUser = (id, deletedName) => {
+    const deleteUser = functions.httpsCallable('deleteUser')
+    deleteUser({ id })
+      .then(() => {
+        database
+          .collection('users')
+          .doc(id)
+          .delete()
+          .then(() =>
+            this.setState({
+              id: '',
+              name: '',
+              email: '',
+              parentsEmail: '',
+              track: '',
+              password: '',
+              feedback: `Successfully deleted ${deletedName}`,
+            }),
+          )
+          .catch(() => this.setState({ feedback: 'Failed to delete user from database' }))
+      })
+      .catch(() => this.setState({ feedback: 'Failed to delete user' }))
+  }
 
   render() {
     return (
@@ -110,6 +136,27 @@ class UpdateUser extends Component {
               >
                 <Initials>{getInitials(user)}</Initials>
                 <Name>{user.name.substring(0, 20)}</Name>
+                <CustomIcon
+                  icon="delete"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    confirmAlert({
+                      title: 'Delete Student?',
+                      message: `Are you sure you want to delete ${user.name}? This cannot be undone.`,
+                      buttons: [
+                        {
+                          label: 'Yes',
+                          onClick: () => this.handleDeleteUser(user.id, user.name),
+                        },
+                        {
+                          label: 'No',
+                          onClick: () => {},
+                        },
+                      ],
+                    })
+                  }}
+                  size="1.5"
+                />
               </User>
             ))}
         </List>
@@ -187,6 +234,7 @@ const List = styled.ul`
 `
 const User = styled.li`
   display: flex;
+  align-items: center;
   border: 1px solid white;
   border-radius: 15px;
   padding: 2% 0;
@@ -212,20 +260,26 @@ const Name = styled.h1`
   white-space: nowrap;
   overflow: hidden;
 `
+const CustomIcon = styled(Icon)`
+  margin: 0 5%;
+  :hover {
+    color: red;
+  }
+`
 const Body = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   @media (max-width: 600px) {
-    flex: auto;
+    justify-content: flex-start;
   }
 `
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   &:last-of-type {
-    border-top: 1px dotted white;
+    border-top: 2px dashed white;
   }
 `
 const Input = styled.input`
