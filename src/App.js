@@ -10,6 +10,7 @@ import Reporting from './views/Reporting'
 import Store from './views/Store'
 import EditUser from './views/EditUser'
 import Shopping from './views/Shopping'
+import { Recognition } from './views/Recognition'
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/store" component={Store} />
         <Route path="/edit-user" component={EditUser} />
         <Route path="/shopping" component={Shopping} />
+        <Route path="/recognition" component={Recognition} />
       </Switch>
     </div>
   )

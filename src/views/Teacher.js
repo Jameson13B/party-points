@@ -4,15 +4,15 @@ import { database, auth } from '../firebase'
 import styled from 'styled-components'
 import Icon from '../components/Icon'
 
-const Teacher = props => {
+const Teacher = (props) => {
   useEffect(() => {
-    auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged((user) => {
       if (user) {
         database
           .collection('users')
           .doc(user.uid)
           .get()
-          .then(doc => {
+          .then((doc) => {
             if (doc.data().track !== 'Teacher') {
               props.history.push('/student-portal')
             }
@@ -29,33 +29,40 @@ const Teacher = props => {
       <Title>Party Points Teacher Page</Title>
       <BtnPanel>
         <IconBtn>
-          <CstmLink to='/dashboard'>
+          <CstmLink to="/dashboard">
             <p>Dashboard</p>
-            <Icon icon='dashboard' />
+            <Icon icon="dashboard" />
           </CstmLink>
         </IconBtn>
         <IconBtn>
-          <CstmLink to='/reporting'>
+          <CstmLink to="/reporting">
             <p>Reporting</p>
-            <Icon icon='description' />
+            <Icon icon="description" />
           </CstmLink>
         </IconBtn>
         <IconBtn>
-          <CstmLink to='/store'>
+          <CstmLink to="/store">
             <p>Store</p>
-            <Icon icon='store' />
+            <Icon icon="store" />
           </CstmLink>
         </IconBtn>
         <IconBtn>
-          <CstmLink to='/edit-user'>
+          <CstmLink to="/recognition">
+            <p>Recognition</p>
+            <p>**Coming Soon**</p>
+            <Icon icon="star" />
+          </CstmLink>
+        </IconBtn>
+        <IconBtn>
+          <CstmLink to="/edit-user">
             <p>Edit User</p>
-            <Icon icon='person' />
+            <Icon icon="person" />
           </CstmLink>
         </IconBtn>
         <IconBtn>
-          <CstmLink to='/register'>
+          <CstmLink to="/register">
             <p>New User</p>
-            <Icon icon='person_add' />
+            <Icon icon="person_add" />
           </CstmLink>
         </IconBtn>
       </BtnPanel>
