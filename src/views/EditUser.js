@@ -10,37 +10,37 @@ class EditUser extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      view: props.view || 'update'
+      view: props.view || 'update',
     }
   }
-  handleToggleView = e => this.setState({ view: e.target.getAttribute('name') })
+  handleToggleView = (e) => this.setState({ view: e.target.getAttribute('name') })
   render() {
     return (
       <Container>
         <Header>
-          <CstmLink to='/'>
-            <Icon icon='home' />
+          <CstmLink to="/">
+            <Icon icon="home" />
           </CstmLink>
           <h3>Edit User</h3>
         </Header>
         <Body>
           <Nav>
             <NavBtn
-              name='update'
+              name="update"
               onClick={this.handleToggleView}
               selected={this.state.view === 'update'}
             >
               Update
             </NavBtn>
             <NavBtn
-              name='delete'
+              name="delete"
               onClick={this.handleToggleView}
               selected={this.state.view === 'delete'}
             >
               Delete
             </NavBtn>
             <NavBtn
-              name='password'
+              name="password"
               onClick={this.handleToggleView}
               selected={this.state.view === 'password'}
             >
@@ -87,7 +87,7 @@ const CstmLink = styled(Link)`
 const Body = styled.div`
   border: 1px solid white;
   border-radius: 15px;
-  height: 84vh
+  height: 84vh;
   padding: 2vh;
   width: 75%;
 `
@@ -96,7 +96,7 @@ const Nav = styled.div`
   justify-content: space-evenly;
 `
 const NavBtn = styled.div`
-  background: ${props => (props.selected ? '#444' : null)};
+  background: ${(props) => (props.selected ? '#444' : null)};
   border: 1px solid white;
   border-radius: 15px;
   color: white;
