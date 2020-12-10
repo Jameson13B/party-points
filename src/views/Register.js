@@ -10,17 +10,17 @@ class Register extends React.Component {
       password: '',
       track: '',
       name: '',
-      error: null
+      error: null,
     }
   }
   componentDidMount() {
-    auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged((user) => {
       if (user) {
         database
           .collection('users')
           .doc(user.uid)
           .get()
-          .then(doc => {
+          .then((doc) => {
             if (doc.data().track !== 'Teacher') {
               this.props.history.push('/student-portal')
             }
@@ -29,7 +29,7 @@ class Register extends React.Component {
     })
   }
 
-  handleRegister = e => {
+  handleRegister = (e) => {
     e.preventDefault()
     const { email, password, track, name } = this.state
     if (!email || !password || !track || !name) {
@@ -41,9 +41,9 @@ class Register extends React.Component {
       email,
       password,
       name,
-      track
+      track,
     })
-      .then(res => {
+      .then((res) => {
         database
           .collection('users')
           .doc(res.data.data.uid)
@@ -51,7 +51,8 @@ class Register extends React.Component {
             email,
             name,
             track,
-            balance: 0
+            balance: 0,
+            active: true,
           })
           .then(() => {
             this.setState({
@@ -59,14 +60,14 @@ class Register extends React.Component {
               email: '',
               password: '',
               track: '',
-              name: ''
+              name: '',
             })
           })
           .catch(() => {
             this.setState({ error: 'Failed to add user to database' })
           })
       })
-      .catch(err => {
+      .catch((err) => {
         this.setState({ error: 'Failed to create user' })
       })
   }
@@ -78,41 +79,39 @@ class Register extends React.Component {
         <Form>
           <Label>Name:</Label>
           <Input
-            autoComplete='off'
-            type='text'
-            id='name'
+            autoComplete="off"
+            type="text"
+            id="name"
             value={this.state.name}
-            onChange={e => this.setState({ name: e.target.value })}
+            onChange={(e) => this.setState({ name: e.target.value })}
           />
           <Label>Class:</Label>
           <Input
-            autoComplete='off'
-            type='text'
-            id='track'
+            autoComplete="off"
+            type="text"
+            id="track"
             value={this.state.track}
-            onChange={e => this.setState({ track: e.target.value })}
+            onChange={(e) => this.setState({ track: e.target.value })}
           />
           <Label>Email:</Label>
           <Input
-            autoComplete='off'
-            type='email'
-            id='email'
+            autoComplete="off"
+            type="email"
+            id="email"
             value={this.state.email}
-            onChange={e => this.setState({ email: e.target.value })}
+            onChange={(e) => this.setState({ email: e.target.value })}
           />
           <Label>Password:</Label>
           <Input
-            autoComplete='off'
-            type='password'
-            id='password'
+            autoComplete="off"
+            type="password"
+            id="password"
             value={this.state.password}
-            onChange={e => this.setState({ password: e.target.value })}
+            onChange={(e) => this.setState({ password: e.target.value })}
           />
           <Button onClick={this.handleRegister}>Register</Button>
           {this.state.error ? <Feedback>{this.state.error}</Feedback> : null}
-          <DashboardLink
-            onClick={() => this.props.history.push('/teacher-portal')}
-          >
+          <DashboardLink onClick={() => this.props.history.push('/teacher-portal')}>
             Go To Portal
           </DashboardLink>
         </Form>

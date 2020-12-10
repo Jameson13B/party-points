@@ -9,14 +9,14 @@ class PosBtnList extends Component {
     super(props)
     this.state = {
       buttons: [],
-      deleting: false
+      deleting: false,
     }
   }
   componentDidMount() {
     if (this.state.buttons.length === 0) {
-      database.collection('positive').onSnapshot(res => {
+      database.collection('positive').onSnapshot((res) => {
         let buttons = []
-        res.forEach(doc => buttons.push({ ...doc.data(), id: doc.id }))
+        res.forEach((doc) => buttons.push({ ...doc.data(), id: doc.id }))
         // Sort buttons by point amount
         buttons.sort((a, b) => (a.points > b.points ? 1 : -1))
         this.setState({ buttons })
@@ -43,16 +43,17 @@ class PosBtnList extends Component {
       database
         .collection('users')
         .where('track', '==', this.props.id.split(' ')[0])
+        .where('active', '==', true)
         .get()
-        .then(res => {
-          res.docs.forEach(doc => {
+        .then((res) => {
+          res.docs.forEach((doc) => {
             const docRef = database.collection('users').doc(doc.id)
 
             docRef
               .update({
-                balance: doc.data().balance + button.points
+                balance: doc.data().balance + button.points,
               })
-              .catch(err => {
+              .catch((err) => {
                 throw err
               })
 
@@ -61,12 +62,12 @@ class PosBtnList extends Component {
               description: button.title,
               user: doc.id,
               balance: doc.data().balance + button.points,
-              date: serverTimestamp()
+              date: serverTimestamp(),
             })
           })
           this.props.history.replace('/dashboard')
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err)
           alert(err)
         })
@@ -91,8 +92,8 @@ class PosBtnList extends Component {
       const userRef = database.collection('users').doc(this.props.id)
 
       database
-        .runTransaction(transaction => {
-          return transaction.get(userRef).then(user => {
+        .runTransaction((transaction) => {
+          return transaction.get(userRef).then((user) => {
             const newBalance = user.data().balance + button.points
             transaction.update(userRef, { balance: newBalance })
             transaction.set(logRef, {
@@ -100,7 +101,7 @@ class PosBtnList extends Component {
               description: button.title,
               user: user.id,
               balance: user.data().balance + button.points,
-              date: serverTimestamp()
+              date: serverTimestamp(),
             })
           })
         })
@@ -108,19 +109,19 @@ class PosBtnList extends Component {
           console.log('Successfully Adding to Users Balance')
           this.props.history.replace('/dashboard')
         })
-        .catch(err => console.log('Error Adding to Users Balance', err))
+        .catch((err) => console.log('Error Adding to Users Balance', err))
     }
   }
   render() {
     return (
       <Container>
         <List>
-          {this.state.buttons.map(button => {
+          {this.state.buttons.map((button) => {
             return (
               <Button
                 key={button.id}
                 deleting={this.state.deleting}
-                onClick={e =>
+                onClick={(e) =>
                   this.props.id.includes('Class')
                     ? this.handleClassAdd(e, button)
                     : this.handleAddPoints(e, button)
@@ -130,17 +131,13 @@ class PosBtnList extends Component {
                 {!this.state.deleting ? (
                   <p>{isNaN(button.points) ? 'Error' : button.points}</p>
                 ) : (
-                    <CustomIcon icon='delete' />
-                  )}
+                  <CustomIcon icon="delete" />
+                )}
               </Button>
             )
           })}
         </List>
-        <AddNew
-          status='positive'
-          toggleDeleting={this.toggleDeleting}
-          id={this.props.id}
-        />
+        <AddNew status="positive" toggleDeleting={this.toggleDeleting} id={this.props.id} />
       </Container>
     )
   }
@@ -174,9 +171,9 @@ const Button = styled.li`
   margin-top: 25px;
   :hover {
     background: #444;
-    border: ${props => props.deleting && '1px solid red'};
+    border: ${(props) => props.deleting && '1px solid red'};
     i {
-      color: ${props => props.deleting && 'red'};
+      color: ${(props) => props.deleting && 'red'};
     }
   }
 `
