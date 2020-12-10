@@ -1,19 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Icon = props => {
-  return (
-    <I className={props.className} onClick={props.onClick}>
-      {props.icon}
-    </I>
-  )
-}
+const Icon = (props) => (
+  <I className={props.className} onClick={props.onClick} size={props.size}>
+    {props.icon}
+  </I>
+)
 
 export default Icon
 
 const I = styled.i`
   font-family: 'Material Icons';
-  font-size: 2em;
+  font-size: ${(props) => props.size || 2}em;
   font-weight: normal;
   font-style: normal;
   line-height: 1;

@@ -53,19 +53,3 @@ const Body = styled.div`
   padding: 2vh;
   width: 75%;
 `
-const Nav = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-`
-const NavBtn = styled.div`
-  background: ${(props) => (props.selected ? '#444' : null)};
-  border: 1px solid white;
-  border-radius: 15px;
-  color: white;
-  cursor: pointer;
-  padding: 15px;
-  width: 20%;
-  :hover {
-    background: #444;
-  }
-`
