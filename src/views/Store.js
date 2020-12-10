@@ -9,20 +9,17 @@ import { database } from '../firebase'
 
 const Store = () => {
   const [view, setView] = useState('purchase-log')
-  const [storeOpen, setStoreOpen] = useState(true)
+  const [storeOpen, setStoreOpen] = useState(undefined)
 
   useEffect(() => {
     database
       .collection('settings')
       .doc('1')
-      .onSnapshot(doc => setStoreOpen(doc.data().storeOpen))
+      .onSnapshot((doc) => setStoreOpen(doc.data().storeOpen))
   }, [storeOpen])
 
   const toggleStore = () => {
-    database
-      .collection('settings')
-      .doc('1')
-      .update({ storeOpen: !storeOpen })
+    database.collection('settings').doc('1').update({ storeOpen: !storeOpen })
   }
 
   return (
@@ -32,26 +29,28 @@ const Store = () => {
           <Icon icon="home" />
         </CstmLink>
         <h3>Store Panel</h3>
-        <ToggleSwitch
-          checked={storeOpen}
-          onToggle={toggleStore}
-          showIcons={false}
-          styles={{
-            component: {
-              background: 'transparent',
-              borderColor: 'transparent',
-              ':focus': {
-                outline: 'none',
+        {storeOpen !== undefined && (
+          <ToggleSwitch
+            checked={storeOpen}
+            onToggle={toggleStore}
+            showIcons={false}
+            styles={{
+              component: {
+                background: 'transparent',
+                borderColor: 'transparent',
+                ':focus': {
+                  outline: 'none',
+                },
               },
-            },
-            trueTrack: {
-              backgroundColor: 'green',
-            },
-            falseTrack: {
-              backgroundColor: 'red',
-            },
-          }}
-        />
+              trueTrack: {
+                backgroundColor: 'green',
+              },
+              falseTrack: {
+                backgroundColor: 'red',
+              },
+            }}
+          />
+        )}
       </Header>
       <Body>
         <Nav>
@@ -117,7 +116,7 @@ const Nav = styled.div`
 `
 const NavBtn = styled.div`
   align-items: center;
-  background: ${props => (props.selected ? '#444' : null)};
+  background: ${(props) => (props.selected ? '#444' : null)};
   border: 1px solid white;
   border-radius: 15px;
   color: white;
