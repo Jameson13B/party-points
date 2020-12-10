@@ -55,7 +55,7 @@ const Teacher = (props) => {
         </IconBtn>
         <IconBtn>
           <CstmLink to="/edit-user">
-            <p>Edit User</p>
+            <p>Update User</p>
             <Icon icon="person" />
           </CstmLink>
         </IconBtn>
