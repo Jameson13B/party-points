@@ -1,62 +1,24 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import Icon from '../components/Icon'
 import UpdateUser from '../components/UpdateUser'
-import UserDelete from '../components/UserDelete'
-import UserPassword from '../components/UserPassword'
 
-class EditUser extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      view: props.view || 'update',
-    }
-  }
-  handleToggleView = (e) => this.setState({ view: e.target.getAttribute('name') })
-  render() {
-    return (
-      <Container>
-        <Header>
-          <CstmLink to="/">
-            <Icon icon="home" />
-          </CstmLink>
-          <h3>Edit User</h3>
-        </Header>
-        <Body>
-          <Nav>
-            <NavBtn
-              name="update"
-              onClick={this.handleToggleView}
-              selected={this.state.view === 'update'}
-            >
-              Update
-            </NavBtn>
-            <NavBtn
-              name="delete"
-              onClick={this.handleToggleView}
-              selected={this.state.view === 'delete'}
-            >
-              Delete
-            </NavBtn>
-            <NavBtn
-              name="password"
-              onClick={this.handleToggleView}
-              selected={this.state.view === 'password'}
-            >
-              Password
-            </NavBtn>
-          </Nav>
-          {this.state.view === 'update' ? <UpdateUser /> : null}
-          {this.state.view === 'delete' ? <UserDelete /> : null}
-          {this.state.view === 'password' ? <UserPassword /> : null}
-        </Body>
-      </Container>
-    )
-  }
+export const EditUser = () => {
+  return (
+    <Container>
+      <Header>
+        <CstmLink to="/">
+          <Icon icon="home" />
+        </CstmLink>
+        <h3>Edit User</h3>
+      </Header>
+      <Body>
+        <UpdateUser />
+      </Body>
+    </Container>
+  )
 }
-
-export default EditUser
 
 const Container = styled.div`
   align-items: center;

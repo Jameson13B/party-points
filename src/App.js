@@ -8,7 +8,7 @@ import Dashboard from './views/Dashboard'
 import Profile from './views/Profile'
 import Reporting from './views/Reporting'
 import Store from './views/Store'
-import EditUser from './views/EditUser'
+import { EditUser } from './views/EditUser'
 import Shopping from './views/Shopping'
 import { Recognition } from './views/Recognition'
 
