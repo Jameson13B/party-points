@@ -13,7 +13,6 @@
   animation: react-confirm-alert-fadeIn 0.3s 0.2s forwards;
 }
 .react-confirm-alert-body {
-  width: 100%;
   padding: 30px;
   text-align: center;
   background: #282c34;
