@@ -49,7 +49,6 @@ const Teacher = (props) => {
         <IconBtn>
           <CstmLink to="/recognition">
             <p>Recognition</p>
-            <p>**Coming Soon**</p>
             <Icon icon="star" />
           </CstmLink>
         </IconBtn>
