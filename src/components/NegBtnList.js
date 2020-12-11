@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { database, serverTimestamp } from '../firebase'
 import Icon from './Icon'
-import AddNew from './AddNew'
 
 class NegBtnList extends Component {
   constructor(props) {
@@ -136,11 +135,6 @@ class NegBtnList extends Component {
             )
           })}
         </List>
-        <AddNew
-          status='negative'
-          toggleDeleting={this.toggleDeleting}
-          id={this.props.id}
-        />
       </Container>
     )
   }
