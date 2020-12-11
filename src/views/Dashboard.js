@@ -66,6 +66,7 @@ class Dashboard extends Component {
               </option>
             ))}
           </Select>
+          <NavBtn to="/recognition">Edit Recognition</NavBtn>
         </Header>
         <UserList>
           {/* If class is filtered show class button */}
@@ -116,6 +117,21 @@ const Select = styled.select`
   }
   option {
     text-transform: uppercase;
+  }
+`
+const NavBtn = styled(Link)`
+  align-self: center;
+  background: transparent;
+  border: 1px solid white;
+  border-radius: 15px;
+  color: white;
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 7px;
+  margin: 7px 0 7px 15px;
+  text-decoration: none;
+  :hover {
+    background: #444;
   }
 `
 const UserList = styled.div`
